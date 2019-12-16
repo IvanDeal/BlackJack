@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace BlackJack
 {
+    /*
+     Version 1.0 of my Blackjack game. Base project complete. Things to imoprove/add/change in future versions
+     1) Move objects into classes for easier management and tidyness
+     2) Add check for duplicate cards being drawn (simulating a single deck game)
+     3) Add visuals/graphics
+     4) Game loop
+     5) Add currency to wager?
+     6) Extended blackjack rules such as splits and having a blackjack and an ace
+     6) Ace is currently only worth 1, need to add option for 11
+     7) I think there are also rules about minimum numbers to stick on.....16 maybe? Need to find those.
+     */
+
     class BlackJackGame
     {
         public string playerFirstCard;
@@ -53,7 +65,6 @@ namespace BlackJack
 
         public BlackJackGame()
         {
-            //DeckArray[0] = new PlayingCard("Hearts", "Ace", 1);
             DeckArray[0] = "Ace of Spades";
             DeckArray[1] = "Ace of Hearts";
             DeckArray[2] = "Ace of Diamonds";
@@ -121,7 +132,6 @@ namespace BlackJack
             while (true)
             {
                 playerFirstCard = selectACard();
-                //addCardToChosenCardArray(playerFirstCard, selectedCardArraySlotRow);
                 playerFirstCardValue = getCardValue(playerFirstCard);
                 playerSecondCard = selectACard();
                 playerSecondCardValue = getCardValue(playerSecondCard);
@@ -146,10 +156,14 @@ namespace BlackJack
                     if (playerCardTotal < dealerCardTotal)
                     {
                         Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
+                        Console.WriteLine("Press any key to replay");
+                        Console.ReadLine();
                     }
                     else if (playerCardTotal == dealerCardTotal)
                     {
                         Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
+                        Console.WriteLine("Press any key to replay");
+                        Console.ReadLine();
                     }
                     else if (playerCardTotal > dealerCardTotal)
                     {
@@ -161,14 +175,20 @@ namespace BlackJack
                         if (dealerCardTotal > 21)
                         {
                             Console.WriteLine("The dealer is bust. You win.");
+                            Console.WriteLine("Press any key to replay");
+                            Console.ReadLine();
                         }
                         else if (dealerCardTotal == playerCardTotal)
                         {
                             Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                            Console.WriteLine("Press any key to replay");
+                            Console.ReadLine();
                         }
                         else if (dealerCardTotal > playerCardTotal)
                         {
                             Console.WriteLine("The dealer has beaten your score and has won.");
+                            Console.WriteLine("Press any key to replay");
+                            Console.ReadLine();
                         }
                         else if (dealerCardTotal < playerCardTotal)
                         {
@@ -180,14 +200,20 @@ namespace BlackJack
                             if (dealerCardTotal > 21)
                             {
                                 Console.WriteLine("The dealer is bust. You win.");
+                                Console.WriteLine("Press any key to replay");
+                                Console.ReadLine();
                             }
                             else if (dealerCardTotal == playerCardTotal)
                             {
                                 Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                Console.WriteLine("Press any key to replay");
+                                Console.ReadLine();
                             }
                             else if (dealerCardTotal > playerCardTotal)
                             {
                                 Console.WriteLine("The dealer has beaten your score and has won.");
+                                Console.WriteLine("Press any key to replay");
+                                Console.ReadLine();
                             }
                             else if (dealerCardTotal < playerCardTotal)
                             {
@@ -199,14 +225,20 @@ namespace BlackJack
                                 if (dealerCardTotal > 21)
                                 {
                                     Console.WriteLine("The dealer is bust. You win.");
+                                    Console.WriteLine("Press any key to replay");
+                                    Console.ReadLine();
                                 }
                                 else if (dealerCardTotal == playerCardTotal)
                                 {
                                     Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                    Console.WriteLine("Press any key to replay");
+                                    Console.ReadLine();
                                 }
                                 else if (dealerCardTotal > playerCardTotal)
                                 {
                                     Console.WriteLine("The dealer has beaten your score and has won.");
+                                    Console.WriteLine("Press any key to replay");
+                                    Console.ReadLine();
                                 }
                                 else if (dealerCardTotal < playerCardTotal)
                                 {
@@ -222,69 +254,365 @@ namespace BlackJack
                 else if (userInput == "T" || userInput == "Twist")
                 {
                     Console.WriteLine("You draw another card.");
+                    playerThirdCard = selectACard();
+                    playerThirdCardValue = getCardValue(playerThirdCard);
+                    playerCardTotal = addCards(playerFirstCardValue, playerSecondCardValue, playerThirdCardValue, playerFourthCardValue, playerFifthCardValue);
+                    if (checkWhetherBust(playerCardTotal))
+                    {
+                        Console.WriteLine("You got a " + playerThirdCard + " and your new total is " + playerCardTotal);
+                        Console.WriteLine("I'm afraid you have gone bust");
+                        Console.WriteLine("Press any key to replay");
+                        Console.ReadLine();
+                    } 
+                    else if (!checkWhetherBust(playerCardTotal))
+                    {
+                        Console.WriteLine("You got a " + playerThirdCard + " and your new total is " + playerCardTotal);
+                        Console.WriteLine("Would you like to (S)tick or (T)wist?");
+                        userInput = Console.ReadLine();
+                        if (userInput == "S" || userInput == "Stick")
+                        {
+                            Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealerFirstCardValue);
+                            Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealerSecondCardValue);
+                            Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
+                            if (playerCardTotal < dealerCardTotal)
+                            {
+                                Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
+                                Console.WriteLine("Press any key to replay");
+                                Console.ReadLine();
+                            }
+                            else if (playerCardTotal == dealerCardTotal)
+                            {
+                                Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
+                                Console.WriteLine("Press any key to replay");
+                                Console.ReadLine();
+                            }
+                            else if (playerCardTotal > dealerCardTotal)
+                            {
+                                Console.WriteLine("The Dealer Twists.");
+                                dealerThirdCard = selectACard();
+                                dealerThirdCardValue = getCardValue(dealerThirdCard);
+                                dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
+                                if (dealerCardTotal > 21)
+                                {
+                                    Console.WriteLine("The dealer is bust. You win.");
+                                    Console.WriteLine("Press any key to replay");
+                                    Console.ReadLine();
+                                }
+                                else if (dealerCardTotal == playerCardTotal)
+                                {
+                                    Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                    Console.WriteLine("Press any key to replay");
+                                    Console.ReadLine();
+                                }
+                                else if (dealerCardTotal > playerCardTotal)
+                                {
+                                    Console.WriteLine("The dealer has beaten your score and has won.");
+                                    Console.WriteLine("Press any key to replay");
+                                    Console.ReadLine();
+                                }
+                                else if (dealerCardTotal < playerCardTotal)
+                                {
+                                    Console.WriteLine("The dealer twists.");
+                                    dealerFourthCard = selectACard();
+                                    dealerFourthCardValue = getCardValue(dealerFourthCard);
+                                    dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                    Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
+                                    if (dealerCardTotal > 21)
+                                    {
+                                        Console.WriteLine("The dealer is bust. You win.");
+                                        Console.WriteLine("Press any key to replay");
+                                        Console.ReadLine();
+                                    }
+                                    else if (dealerCardTotal == playerCardTotal)
+                                    {
+                                        Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                        Console.WriteLine("Press any key to replay");
+                                        Console.ReadLine();
+                                    }
+                                    else if (dealerCardTotal > playerCardTotal)
+                                    {
+                                        Console.WriteLine("The dealer has beaten your score and has won.");
+                                        Console.WriteLine("Press any key to replay");
+                                        Console.ReadLine();
+                                    }
+                                    else if (dealerCardTotal < playerCardTotal)
+                                    {
+                                        Console.WriteLine("The dealer twists.");
+                                        dealerFifthCard = selectACard();
+                                        dealerFifthCardValue = getCardValue(dealerFifthCard);
+                                        dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                        Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
+                                        if (dealerCardTotal > 21)
+                                        {
+                                            Console.WriteLine("The dealer is bust. You win.");
+                                            Console.WriteLine("Press any key to replay");
+                                            Console.ReadLine();
+                                        }
+                                        else if (dealerCardTotal == playerCardTotal)
+                                        {
+                                            Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                            Console.WriteLine("Press any key to replay");
+                                            Console.ReadLine();
+                                        }
+                                        else if (dealerCardTotal > playerCardTotal)
+                                        {
+                                            Console.WriteLine("The dealer has beaten your score and has won.");
+                                            Console.WriteLine("Press any key to replay");
+                                            Console.ReadLine();
+                                        }
+                                        else if (dealerCardTotal < playerCardTotal)
+                                        {
+                                            Console.WriteLine("Even with 5 cards, the dealer couldn't beat you. Well done.");
+                                            Console.WriteLine("Press any key to replay");
+                                            Console.ReadLine();
+                                        }
+                                    }
+                                }
+                            }
 
+                        }
+                        else if (userInput == "T" || userInput == "Twist")
+                        {
+                            Console.WriteLine("You draw another card.");
+                            playerFourthCard = selectACard();
+                            playerFourthCardValue = getCardValue(playerFourthCard);
+                            playerCardTotal = addCards(playerFirstCardValue, playerSecondCardValue, playerThirdCardValue, playerFourthCardValue, playerFifthCardValue);
+                            if (checkWhetherBust(playerCardTotal))
+                            {
+                                Console.WriteLine("You got a " + playerFourthCard + " and your new total is " + playerCardTotal);
+                                Console.WriteLine("I'm afraid you have gone bust");
+                                Console.WriteLine("Press any key to replay");
+                                Console.ReadLine();
+                            }
+                            else if (!checkWhetherBust(playerCardTotal))
+                            {
+                                Console.WriteLine("You got a " + playerFourthCard + " and your new total is " + playerCardTotal);
+                                Console.WriteLine("Would you like to (S)tick or (T)wist?");
+                                userInput = Console.ReadLine();
+                                if (userInput == "S" || userInput == "Stick")
+                                {
+                                    Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealerFirstCardValue);
+                                    Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealerSecondCardValue);
+                                    Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
+                                    if (playerCardTotal < dealerCardTotal)
+                                    {
+                                        Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
+                                        Console.WriteLine("Press any key to replay");
+                                        Console.ReadLine();
+                                    }
+                                    else if (playerCardTotal == dealerCardTotal)
+                                    {
+                                        Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
+                                        Console.WriteLine("Press any key to replay");
+                                        Console.ReadLine();
+                                    }
+                                    else if (playerCardTotal > dealerCardTotal)
+                                    {
+                                        Console.WriteLine("The Dealer Twists.");
+                                        dealerThirdCard = selectACard();
+                                        dealerThirdCardValue = getCardValue(dealerThirdCard);
+                                        dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                        Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
+                                        if (dealerCardTotal > 21)
+                                        {
+                                            Console.WriteLine("The dealer is bust. You win.");
+                                            Console.WriteLine("Press any key to replay");
+                                            Console.ReadLine();
+                                        }
+                                        else if (dealerCardTotal == playerCardTotal)
+                                        {
+                                            Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                            Console.WriteLine("Press any key to replay");
+                                            Console.ReadLine();
+                                        }
+                                        else if (dealerCardTotal > playerCardTotal)
+                                        {
+                                            Console.WriteLine("The dealer has beaten your score and has won.");
+                                            Console.WriteLine("Press any key to replay");
+                                            Console.ReadLine();
+                                        }
+                                        else if (dealerCardTotal < playerCardTotal)
+                                        {
+                                            Console.WriteLine("The dealer twists.");
+                                            dealerFourthCard = selectACard();
+                                            dealerFourthCardValue = getCardValue(dealerFourthCard);
+                                            dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                            Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
+                                            if (dealerCardTotal > 21)
+                                            {
+                                                Console.WriteLine("The dealer is bust. You win.");
+                                                Console.WriteLine("Press any key to replay");
+                                                Console.ReadLine();
+                                            }
+                                            else if (dealerCardTotal == playerCardTotal)
+                                            {
+                                                Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                                Console.WriteLine("Press any key to replay");
+                                                Console.ReadLine();
+                                            }
+                                            else if (dealerCardTotal > playerCardTotal)
+                                            {
+                                                Console.WriteLine("The dealer has beaten your score and has won.");
+                                                Console.WriteLine("Press any key to replay");
+                                                Console.ReadLine();
+                                            }
+                                            else if (dealerCardTotal < playerCardTotal)
+                                            {
+                                                Console.WriteLine("The dealer twists.");
+                                                dealerFifthCard = selectACard();
+                                                dealerFifthCardValue = getCardValue(dealerFifthCard);
+                                                dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                                Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
+                                                if (dealerCardTotal > 21)
+                                                {
+                                                    Console.WriteLine("The dealer is bust. You win.");
+                                                    Console.WriteLine("Press any key to replay");
+                                                    Console.ReadLine();
+                                                }
+                                                else if (dealerCardTotal == playerCardTotal)
+                                                {
+                                                    Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                                    Console.WriteLine("Press any key to replay");
+                                                    Console.ReadLine();
+                                                }
+                                                else if (dealerCardTotal > playerCardTotal)
+                                                {
+                                                    Console.WriteLine("The dealer has beaten your score and has won.");
+                                                    Console.WriteLine("Press any key to replay");
+                                                    Console.ReadLine();
+                                                }
+                                                else if (dealerCardTotal < playerCardTotal)
+                                                {
+                                                    Console.WriteLine("Even with 5 cards, the dealer couldn't beat you. Well done.");
+                                                    Console.WriteLine("Press any key to replay");
+                                                    Console.ReadLine();
+                                                }
+                                            }
+                                        }
+                                    }
 
+                                }
+                                else if (userInput == "T" || userInput == "Twist")
+                                {
+                                    Console.WriteLine("You draw another card.");
+                                    playerFifthCard = selectACard();
+                                    playerFifthCardValue = getCardValue(playerFifthCard);
+                                    playerCardTotal = addCards(playerFirstCardValue, playerSecondCardValue, playerThirdCardValue, playerFourthCardValue, playerFifthCardValue);
+                                    if (checkWhetherBust(playerCardTotal))
+                                    {
+                                        Console.WriteLine("You got a " + playerFifthCard + " and your new total is " + playerCardTotal);
+                                        Console.WriteLine("I'm afraid you have gone bust");
+                                        Console.ReadLine();
+                                    }
+                                    else if (!checkWhetherBust(playerCardTotal))
+                                    {
+                                        Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealerFirstCardValue);
+                                        Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealerSecondCardValue);
+                                        Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
+                                        if (playerCardTotal < dealerCardTotal)
+                                        {
+                                            Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
+                                            Console.WriteLine("Press any key to replay");
+                                            Console.ReadLine();
+                                        }
+                                        else if (playerCardTotal == dealerCardTotal)
+                                        {
+                                            Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
+                                            Console.WriteLine("Press any key to replay");
+                                            Console.ReadLine();
+                                        }
+                                        else if (playerCardTotal > dealerCardTotal)
+                                        {
+                                            Console.WriteLine("The Dealer Twists.");
+                                            dealerThirdCard = selectACard();
+                                            dealerThirdCardValue = getCardValue(dealerThirdCard);
+                                            dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                            Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
+                                            if (dealerCardTotal > 21)
+                                            {
+                                                Console.WriteLine("The dealer is bust. You win.");
+                                                Console.WriteLine("Press any key to replay");
+                                                Console.ReadLine();
+                                            }
+                                            else if (dealerCardTotal == playerCardTotal)
+                                            {
+                                                Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                                Console.WriteLine("Press any key to replay");
+                                                Console.ReadLine();
+                                            }
+                                            else if (dealerCardTotal > playerCardTotal)
+                                            {
+                                                Console.WriteLine("The dealer has beaten your score and has won.");
+                                                Console.WriteLine("Press any key to replay");
+                                                Console.ReadLine();
+                                            }
+                                            else if (dealerCardTotal < playerCardTotal)
+                                            {
+                                                Console.WriteLine("The dealer twists.");
+                                                dealerFourthCard = selectACard();
+                                                dealerFourthCardValue = getCardValue(dealerFourthCard);
+                                                dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                                Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
+                                                if (dealerCardTotal > 21)
+                                                {
+                                                    Console.WriteLine("The dealer is bust. You win.");
+                                                    Console.WriteLine("Press any key to replay");
+                                                    Console.ReadLine();
+                                                }
+                                                else if (dealerCardTotal == playerCardTotal)
+                                                {
+                                                    Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                                    Console.WriteLine("Press any key to replay");
+                                                    Console.ReadLine();
+                                                }
+                                                else if (dealerCardTotal > playerCardTotal)
+                                                {
+                                                    Console.WriteLine("The dealer has beaten your score and has won.");
+                                                    Console.WriteLine("Press any key to replay");
+                                                    Console.ReadLine();
+                                                }
+                                                else if (dealerCardTotal < playerCardTotal)
+                                                {
+                                                    Console.WriteLine("The dealer twists.");
+                                                    dealerFifthCard = selectACard();
+                                                    dealerFifthCardValue = getCardValue(dealerFifthCard);
+                                                    dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                                    Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
+                                                    if (dealerCardTotal > 21)
+                                                    {
+                                                        Console.WriteLine("The dealer is bust. You win.");
+                                                        Console.WriteLine("Press any key to replay");
+                                                        Console.ReadLine();
+                                                    }
+                                                    else if (dealerCardTotal == playerCardTotal)
+                                                    {
+                                                        Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
+                                                        Console.WriteLine("Press any key to replay");
+                                                        Console.ReadLine();
+                                                    }
+                                                    else if (dealerCardTotal > playerCardTotal)
+                                                    {
+                                                        Console.WriteLine("The dealer has beaten your score and has won.");
+                                                        Console.WriteLine("Press any key to replay");
+                                                        Console.ReadLine();
+                                                    }
+                                                    else if (dealerCardTotal < playerCardTotal)
+                                                    {
+                                                        Console.WriteLine("Even with 5 cards, the dealer couldn't beat you. Well done.");
+                                                        Console.WriteLine("Press any key to replay");
+                                                        Console.ReadLine();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-
             }
-
-            //randomly select two cards from the array and assign to the player.
-            //Display names and values of the cards as well as the total. Present an option to stick or twist
-            //If total goes over 21 player loses
-            // Deal two cards to the dealer
-            // Display names and values of cards
-            // if total is 21 or less and higher than or equal to the players total the dealer wins
-
-            
-            
-                       
-            //Need to figure out where to put this next bit. Perhaps it needs to go inside the select a card method
-            /*if (confirmCardIsNotDuplicate(selectedCardArray) == true)
-            {
-
-            }*/
-            
-
-            //Does it matter if the dealer gets the cards after the player has chosen all of theirs
-            
-
-            
-            
-            //Console.WriteLine("Your current total is: " + playerCardTotal +". Would you like to (S)tick or (T)wist?");
-            /*string userInput = Console.ReadLine();
-            if (checkWhetherBust(playerCardTotal) == true)
-            {
-
-            } 
-            else if(checkWhetherBust(playerCardTotal) == true)
-            {
-
-                if (userInput == "S")
-                {
-
-                }
-                else if (userInput == "T")
-                {
-
-                }
-
-            } */
-            
-            //Dealer's results 
-            
-            if(playerCardTotal < dealerCardTotal)
-            {
-                Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
-            } else if (playerCardTotal == dealerCardTotal)
-            {
-                Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
-            } else if(playerCardTotal > dealerCardTotal)
-            {
-                Console.WriteLine("Congratulations. You have beaten the dealer");
-            }
-            
-            Console.ReadLine();
-
         }
 
         public string selectACard()
@@ -316,9 +644,7 @@ namespace BlackJack
                 } 
 
             }
-
             return cardCheckResult;
- 
         }
 
         public int getCardValue(string cardName)
