@@ -16,21 +16,25 @@ namespace BlackJack
      6) Extended blackjack rules such as splits and having a blackjack and an ace
      6) Ace is currently only worth 1, need to add option for 11
      7) I think there are also rules about minimum numbers to stick on.....16 maybe? Need to find those.
+     8) Multiple players?
      */
 
     class BlackJackGame
     {
+        //Player player = new Player();
+        //Player dealer = new Player();
+
         public string playerFirstCard;
         public string playerSecondCard;
         public string playerThirdCard;
         public string playerFourthCard;
         public string playerFifthCard;
 
-        public int playerFirstCardValue;
+        /*public int playerFirstCardValue;
         public int playerSecondCardValue;
         public int playerThirdCardValue = 0;
         public int playerFourthCardValue = 0;
-        public int playerFifthCardValue = 0;
+        public int playerFifthCardValue = 0;*/
         public int playerCardTotal;
 
         public string dealerFirstCard;
@@ -39,11 +43,11 @@ namespace BlackJack
         public string dealerFourthCard;
         public string dealerFifthCard;
 
-        public int dealerFirstCardValue;
+        /*public int dealerFirstCardValue;
         public int dealerSecondCardValue;
         public int dealerThirdCardValue;
         public int dealerFourthCardValue;
-        public int dealerFifthCardValue;
+        public int dealerFifthCardValue;*/
         public int dealerCardTotal;
 
         public string firstCardSlot;
@@ -131,27 +135,33 @@ namespace BlackJack
 
             while (true)
             {
+                Player player = new Player();
+                Player dealer = new Player();
+                //player.clearPlayerTotals();
+                //dealer.clearPlayerTotals();
+
                 playerFirstCard = selectACard();
-                playerFirstCardValue = getCardValue(playerFirstCard);
+                player.firstCardValue = getCardValue(playerFirstCard);
                 playerSecondCard = selectACard();
-                playerSecondCardValue = getCardValue(playerSecondCard);
-                playerCardTotal = addCards(playerFirstCardValue, playerSecondCardValue, playerThirdCardValue, playerFourthCardValue, playerFifthCardValue);
+                player.secondCardValue = getCardValue(playerSecondCard);
+                playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
 
                 dealerFirstCard = selectACard();
-                dealerFirstCardValue = getCardValue(dealerFirstCard);
+                dealer.firstCardValue = getCardValue(dealerFirstCard);
                 dealerSecondCard = selectACard();
-                dealerSecondCardValue = getCardValue(dealerSecondCard);
-                dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                dealer.secondCardValue = getCardValue(dealerSecondCard);
+                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
 
-                Console.WriteLine("Your first card is the: " + playerFirstCard + ". Which is worth: " + playerFirstCardValue);
-                Console.WriteLine("Your second card is the: " + playerSecondCard + ". Which is worth: " + playerSecondCardValue);
+                Console.WriteLine("Your first card is the: " + playerFirstCard + ". Which is worth: " + player.firstCardValue);
+                Console.WriteLine("Your second card is the: " + playerSecondCard + ". Which is worth: " + player.secondCardValue);
                 Console.WriteLine("Your current total is: " + playerCardTotal);
                 Console.WriteLine("Would you like to (S)tick or (T)wist?");
                 string userInput = Console.ReadLine();
-                if (userInput == "S" || userInput == "Stick")
+                string userInputLower = userInput.ToLower();
+                if (userInputLower == "s" || userInputLower == "stick")
                 {
-                    Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealerFirstCardValue);
-                    Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealerSecondCardValue);
+                    Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealer.firstCardValue);
+                    Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealer.secondCardValue);
                     Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                     if (playerCardTotal < dealerCardTotal)
                     {
@@ -169,8 +179,8 @@ namespace BlackJack
                     {
                         Console.WriteLine("The Dealer Twists.");
                         dealerThirdCard = selectACard();
-                        dealerThirdCardValue = getCardValue(dealerThirdCard);
-                        dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                        dealer.thirdCardValue = getCardValue(dealerThirdCard);
+                        dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                         Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
                         if (dealerCardTotal > 21)
                         {
@@ -194,8 +204,8 @@ namespace BlackJack
                         {
                             Console.WriteLine("The dealer twists.");
                             dealerFourthCard = selectACard();
-                            dealerFourthCardValue = getCardValue(dealerFourthCard);
-                            dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                            dealer.fourthCardValue = getCardValue(dealerFourthCard);
+                            dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                             Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
                             if (dealerCardTotal > 21)
                             {
@@ -219,8 +229,8 @@ namespace BlackJack
                             {
                                 Console.WriteLine("The dealer twists.");
                                 dealerFifthCard = selectACard();
-                                dealerFifthCardValue = getCardValue(dealerFifthCard);
-                                dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                dealer.fifthCardValue = getCardValue(dealerFifthCard);
+                                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                 Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
                                 if (dealerCardTotal > 21)
                                 {
@@ -251,12 +261,12 @@ namespace BlackJack
                     }
 
                 } 
-                else if (userInput == "T" || userInput == "Twist")
+                else if (userInputLower == "t" || userInputLower == "twist")
                 {
                     Console.WriteLine("You draw another card.");
                     playerThirdCard = selectACard();
-                    playerThirdCardValue = getCardValue(playerThirdCard);
-                    playerCardTotal = addCards(playerFirstCardValue, playerSecondCardValue, playerThirdCardValue, playerFourthCardValue, playerFifthCardValue);
+                    player.thirdCardValue = getCardValue(playerThirdCard);
+                    playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
                     if (checkWhetherBust(playerCardTotal))
                     {
                         Console.WriteLine("You got a " + playerThirdCard + " and your new total is " + playerCardTotal);
@@ -269,10 +279,10 @@ namespace BlackJack
                         Console.WriteLine("You got a " + playerThirdCard + " and your new total is " + playerCardTotal);
                         Console.WriteLine("Would you like to (S)tick or (T)wist?");
                         userInput = Console.ReadLine();
-                        if (userInput == "S" || userInput == "Stick")
+                        if (userInputLower == "s" || userInputLower == "stick")
                         {
-                            Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealerFirstCardValue);
-                            Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealerSecondCardValue);
+                            Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealer.firstCardValue);
+                            Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealer.secondCardValue);
                             Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                             if (playerCardTotal < dealerCardTotal)
                             {
@@ -290,8 +300,8 @@ namespace BlackJack
                             {
                                 Console.WriteLine("The Dealer Twists.");
                                 dealerThirdCard = selectACard();
-                                dealerThirdCardValue = getCardValue(dealerThirdCard);
-                                dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                dealer.thirdCardValue = getCardValue(dealerThirdCard);
+                                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                 Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
                                 if (dealerCardTotal > 21)
                                 {
@@ -315,8 +325,8 @@ namespace BlackJack
                                 {
                                     Console.WriteLine("The dealer twists.");
                                     dealerFourthCard = selectACard();
-                                    dealerFourthCardValue = getCardValue(dealerFourthCard);
-                                    dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                    dealer.fourthCardValue = getCardValue(dealerFourthCard);
+                                    dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                     Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
                                     if (dealerCardTotal > 21)
                                     {
@@ -340,8 +350,8 @@ namespace BlackJack
                                     {
                                         Console.WriteLine("The dealer twists.");
                                         dealerFifthCard = selectACard();
-                                        dealerFifthCardValue = getCardValue(dealerFifthCard);
-                                        dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                        dealer.fifthCardValue = getCardValue(dealerFifthCard);
+                                        dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                         Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
                                         if (dealerCardTotal > 21)
                                         {
@@ -372,12 +382,12 @@ namespace BlackJack
                             }
 
                         }
-                        else if (userInput == "T" || userInput == "Twist")
+                        else if (userInputLower == "t" || userInputLower == "twist")
                         {
                             Console.WriteLine("You draw another card.");
                             playerFourthCard = selectACard();
-                            playerFourthCardValue = getCardValue(playerFourthCard);
-                            playerCardTotal = addCards(playerFirstCardValue, playerSecondCardValue, playerThirdCardValue, playerFourthCardValue, playerFifthCardValue);
+                            player.fourthCardValue = getCardValue(playerFourthCard);
+                            playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
                             if (checkWhetherBust(playerCardTotal))
                             {
                                 Console.WriteLine("You got a " + playerFourthCard + " and your new total is " + playerCardTotal);
@@ -390,10 +400,10 @@ namespace BlackJack
                                 Console.WriteLine("You got a " + playerFourthCard + " and your new total is " + playerCardTotal);
                                 Console.WriteLine("Would you like to (S)tick or (T)wist?");
                                 userInput = Console.ReadLine();
-                                if (userInput == "S" || userInput == "Stick")
+                                if (userInputLower == "s" || userInputLower == "stick")
                                 {
-                                    Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealerFirstCardValue);
-                                    Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealerSecondCardValue);
+                                    Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealer.firstCardValue);
+                                    Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealer.secondCardValue);
                                     Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                                     if (playerCardTotal < dealerCardTotal)
                                     {
@@ -411,8 +421,8 @@ namespace BlackJack
                                     {
                                         Console.WriteLine("The Dealer Twists.");
                                         dealerThirdCard = selectACard();
-                                        dealerThirdCardValue = getCardValue(dealerThirdCard);
-                                        dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                        dealer.thirdCardValue = getCardValue(dealerThirdCard);
+                                        dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                         Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
                                         if (dealerCardTotal > 21)
                                         {
@@ -436,8 +446,8 @@ namespace BlackJack
                                         {
                                             Console.WriteLine("The dealer twists.");
                                             dealerFourthCard = selectACard();
-                                            dealerFourthCardValue = getCardValue(dealerFourthCard);
-                                            dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                            dealer.fourthCardValue = getCardValue(dealerFourthCard);
+                                            dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                             Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
                                             if (dealerCardTotal > 21)
                                             {
@@ -461,8 +471,8 @@ namespace BlackJack
                                             {
                                                 Console.WriteLine("The dealer twists.");
                                                 dealerFifthCard = selectACard();
-                                                dealerFifthCardValue = getCardValue(dealerFifthCard);
-                                                dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                                dealer.fifthCardValue = getCardValue(dealerFifthCard);
+                                                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                                 Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
                                                 if (dealerCardTotal > 21)
                                                 {
@@ -493,12 +503,12 @@ namespace BlackJack
                                     }
 
                                 }
-                                else if (userInput == "T" || userInput == "Twist")
+                                else if (userInputLower == "t" || userInputLower == "twist")
                                 {
                                     Console.WriteLine("You draw another card.");
                                     playerFifthCard = selectACard();
-                                    playerFifthCardValue = getCardValue(playerFifthCard);
-                                    playerCardTotal = addCards(playerFirstCardValue, playerSecondCardValue, playerThirdCardValue, playerFourthCardValue, playerFifthCardValue);
+                                    player.fifthCardValue = getCardValue(playerFifthCard);
+                                    playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
                                     if (checkWhetherBust(playerCardTotal))
                                     {
                                         Console.WriteLine("You got a " + playerFifthCard + " and your new total is " + playerCardTotal);
@@ -507,8 +517,8 @@ namespace BlackJack
                                     }
                                     else if (!checkWhetherBust(playerCardTotal))
                                     {
-                                        Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealerFirstCardValue);
-                                        Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealerSecondCardValue);
+                                        Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealer.firstCardValue);
+                                        Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealer.secondCardValue);
                                         Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                                         if (playerCardTotal < dealerCardTotal)
                                         {
@@ -526,8 +536,8 @@ namespace BlackJack
                                         {
                                             Console.WriteLine("The Dealer Twists.");
                                             dealerThirdCard = selectACard();
-                                            dealerThirdCardValue = getCardValue(dealerThirdCard);
-                                            dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                            dealer.thirdCardValue = getCardValue(dealerThirdCard);
+                                            dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                             Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
                                             if (dealerCardTotal > 21)
                                             {
@@ -551,8 +561,8 @@ namespace BlackJack
                                             {
                                                 Console.WriteLine("The dealer twists.");
                                                 dealerFourthCard = selectACard();
-                                                dealerFourthCardValue = getCardValue(dealerFourthCard);
-                                                dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                                dealer.fourthCardValue = getCardValue(dealerFourthCard);
+                                                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                                 Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
                                                 if (dealerCardTotal > 21)
                                                 {
@@ -576,8 +586,8 @@ namespace BlackJack
                                                 {
                                                     Console.WriteLine("The dealer twists.");
                                                     dealerFifthCard = selectACard();
-                                                    dealerFifthCardValue = getCardValue(dealerFifthCard);
-                                                    dealerCardTotal = addCards(dealerFirstCardValue, dealerSecondCardValue, dealerThirdCardValue, dealerFourthCardValue, dealerFifthCardValue);
+                                                    dealer.fifthCardValue = getCardValue(dealerFifthCard);
+                                                    dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                                     Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
                                                     if (dealerCardTotal > 21)
                                                     {
@@ -735,12 +745,12 @@ namespace BlackJack
             return cardValue;
         }
 
-        public int addCards(int firstCard, int secondCard, int thirdCard, int fourthCard, int fifthCard)
+        /*public int addCards(int firstCard, int secondCard, int thirdCard, int fourthCard, int fifthCard)
         {
             int total;
             total = (firstCard + secondCard + thirdCard + fourthCard + fifthCard);
             return total;
-        }
+        }*/
 
         public bool checkWhetherBust(int currentTotal)
         {

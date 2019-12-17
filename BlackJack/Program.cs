@@ -14,7 +14,8 @@ namespace BlackJack
             Console.WriteLine("Hello, Welcome to my BlackJack game V1.0.");
             Console.WriteLine("If you would like to play please type (P)lay");
             string userInput = Console.ReadLine();
-            if (userInput == "P" || userInput == "Play")
+            string userInputLower = userInput.ToLower();
+            if (userInputLower == "p" || userInputLower == "play")
             {
                 new BlackJackGame();
             }
