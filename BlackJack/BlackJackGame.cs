@@ -17,6 +17,7 @@ namespace BlackJack
      6) Ace is currently only worth 1, need to add option for 11
      7) I think there are also rules about minimum numbers to stick on.....16 maybe? Need to find those.
      8) Multiple players?
+     9) Clean up inputs
      */
 
     class BlackJackGame
@@ -50,22 +51,11 @@ namespace BlackJack
         public int dealerFifthCardValue;*/
         public int dealerCardTotal;
 
-        public string firstCardSlot;
-        public string secondCardSlot;
-        public string thirdCardSlot;
-        public string fourthCardSlot;
-        public string fifthCardSlot;
-        public string sixthCardSlot;
-        public string seventhCardSlot;
-        public string eightCardslot;
-        public string ninthCardSlot;
-        public string tenthCardSlot;
-
         public int selectedCardArraySlotRow = 0;
 
         Random random = new Random();
         public string[] DeckArray = new string[52];
-        public string[] selectedCardArray = new string[10];
+        //public string[] selectedCardArray = new string[10];
 
         public BlackJackGame()
         {
@@ -122,16 +112,6 @@ namespace BlackJack
             DeckArray[50] = "King of Diamonds";
             DeckArray[51] = "King of Clubs";
 
-            selectedCardArray[0] = "";
-            selectedCardArray[1] = "";
-            selectedCardArray[2] = "";
-            selectedCardArray[3] = "";
-            selectedCardArray[4] = "";
-            selectedCardArray[5] = "";
-            selectedCardArray[6] = "";
-            selectedCardArray[7] = "";
-            selectedCardArray[8] = "";
-            selectedCardArray[9] = "";
 
             while (true)
             {
@@ -158,6 +138,7 @@ namespace BlackJack
                 Console.WriteLine("Would you like to (S)tick or (T)wist?");
                 string userInput = Console.ReadLine();
                 string userInputLower = userInput.ToLower();
+                //PlayerInput round 1
                 if (userInputLower == "s" || userInputLower == "stick")
                 {
                     Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealer.firstCardValue);
@@ -182,7 +163,7 @@ namespace BlackJack
                         dealer.thirdCardValue = getCardValue(dealerThirdCard);
                         dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                         Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
-                        if (dealerCardTotal > 21)
+                        if (dealer.CheckWhetherBust(dealerCardTotal))
                         {
                             Console.WriteLine("The dealer is bust. You win.");
                             Console.WriteLine("Press any key to replay");
@@ -232,7 +213,7 @@ namespace BlackJack
                                 dealer.fifthCardValue = getCardValue(dealerFifthCard);
                                 dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                 Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
-                                if (dealerCardTotal > 21)
+                                if (dealer.CheckWhetherBust(dealerCardTotal))
                                 {
                                     Console.WriteLine("The dealer is bust. You win.");
                                     Console.WriteLine("Press any key to replay");
@@ -267,18 +248,20 @@ namespace BlackJack
                     playerThirdCard = selectACard();
                     player.thirdCardValue = getCardValue(playerThirdCard);
                     playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
-                    if (checkWhetherBust(playerCardTotal))
+                    if (player.CheckWhetherBust(playerCardTotal))
                     {
                         Console.WriteLine("You got a " + playerThirdCard + " and your new total is " + playerCardTotal);
                         Console.WriteLine("I'm afraid you have gone bust");
                         Console.WriteLine("Press any key to replay");
                         Console.ReadLine();
                     } 
-                    else if (!checkWhetherBust(playerCardTotal))
+                    else if (!player.CheckWhetherBust(playerCardTotal))
                     {
                         Console.WriteLine("You got a " + playerThirdCard + " and your new total is " + playerCardTotal);
                         Console.WriteLine("Would you like to (S)tick or (T)wist?");
                         userInput = Console.ReadLine();
+                        userInputLower = userInput.ToLower();
+                        //Player Round 2
                         if (userInputLower == "s" || userInputLower == "stick")
                         {
                             Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealer.firstCardValue);
@@ -303,7 +286,7 @@ namespace BlackJack
                                 dealer.thirdCardValue = getCardValue(dealerThirdCard);
                                 dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                 Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
-                                if (dealerCardTotal > 21)
+                                if (dealer.CheckWhetherBust(dealerCardTotal))
                                 {
                                     Console.WriteLine("The dealer is bust. You win.");
                                     Console.WriteLine("Press any key to replay");
@@ -328,7 +311,7 @@ namespace BlackJack
                                     dealer.fourthCardValue = getCardValue(dealerFourthCard);
                                     dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                     Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
-                                    if (dealerCardTotal > 21)
+                                    if (dealer.CheckWhetherBust(dealerCardTotal))
                                     {
                                         Console.WriteLine("The dealer is bust. You win.");
                                         Console.WriteLine("Press any key to replay");
@@ -353,7 +336,7 @@ namespace BlackJack
                                         dealer.fifthCardValue = getCardValue(dealerFifthCard);
                                         dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                         Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
-                                        if (dealerCardTotal > 21)
+                                        if (dealer.CheckWhetherBust(dealerCardTotal))
                                         {
                                             Console.WriteLine("The dealer is bust. You win.");
                                             Console.WriteLine("Press any key to replay");
@@ -388,18 +371,20 @@ namespace BlackJack
                             playerFourthCard = selectACard();
                             player.fourthCardValue = getCardValue(playerFourthCard);
                             playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
-                            if (checkWhetherBust(playerCardTotal))
+                            if (player.CheckWhetherBust(playerCardTotal))
                             {
                                 Console.WriteLine("You got a " + playerFourthCard + " and your new total is " + playerCardTotal);
                                 Console.WriteLine("I'm afraid you have gone bust");
                                 Console.WriteLine("Press any key to replay");
                                 Console.ReadLine();
                             }
-                            else if (!checkWhetherBust(playerCardTotal))
+                            else if (!player.CheckWhetherBust(playerCardTotal))
                             {
                                 Console.WriteLine("You got a " + playerFourthCard + " and your new total is " + playerCardTotal);
                                 Console.WriteLine("Would you like to (S)tick or (T)wist?");
                                 userInput = Console.ReadLine();
+                                userInputLower = userInput.ToLower();
+                                //Player Round 3
                                 if (userInputLower == "s" || userInputLower == "stick")
                                 {
                                     Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealer.firstCardValue);
@@ -424,7 +409,7 @@ namespace BlackJack
                                         dealer.thirdCardValue = getCardValue(dealerThirdCard);
                                         dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                         Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
-                                        if (dealerCardTotal > 21)
+                                        if (dealer.CheckWhetherBust(dealerCardTotal))
                                         {
                                             Console.WriteLine("The dealer is bust. You win.");
                                             Console.WriteLine("Press any key to replay");
@@ -449,7 +434,7 @@ namespace BlackJack
                                             dealer.fourthCardValue = getCardValue(dealerFourthCard);
                                             dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                             Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
-                                            if (dealerCardTotal > 21)
+                                            if (dealer.CheckWhetherBust(dealerCardTotal))
                                             {
                                                 Console.WriteLine("The dealer is bust. You win.");
                                                 Console.WriteLine("Press any key to replay");
@@ -474,7 +459,7 @@ namespace BlackJack
                                                 dealer.fifthCardValue = getCardValue(dealerFifthCard);
                                                 dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                                 Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
-                                                if (dealerCardTotal > 21)
+                                                if (dealer.CheckWhetherBust(dealerCardTotal))
                                                 {
                                                     Console.WriteLine("The dealer is bust. You win.");
                                                     Console.WriteLine("Press any key to replay");
@@ -509,13 +494,13 @@ namespace BlackJack
                                     playerFifthCard = selectACard();
                                     player.fifthCardValue = getCardValue(playerFifthCard);
                                     playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
-                                    if (checkWhetherBust(playerCardTotal))
+                                    if (player.CheckWhetherBust(playerCardTotal))
                                     {
                                         Console.WriteLine("You got a " + playerFifthCard + " and your new total is " + playerCardTotal);
                                         Console.WriteLine("I'm afraid you have gone bust");
                                         Console.ReadLine();
                                     }
-                                    else if (!checkWhetherBust(playerCardTotal))
+                                    else if (!player.CheckWhetherBust(playerCardTotal))
                                     {
                                         Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + ". Which is worth: " + dealer.firstCardValue);
                                         Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + ". which is worth: " + dealer.secondCardValue);
@@ -539,7 +524,7 @@ namespace BlackJack
                                             dealer.thirdCardValue = getCardValue(dealerThirdCard);
                                             dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                             Console.WriteLine("The dealer got a " + dealerThirdCard + ". Their total is now " + dealerCardTotal);
-                                            if (dealerCardTotal > 21)
+                                            if (dealer.CheckWhetherBust(dealerCardTotal))
                                             {
                                                 Console.WriteLine("The dealer is bust. You win.");
                                                 Console.WriteLine("Press any key to replay");
@@ -564,7 +549,7 @@ namespace BlackJack
                                                 dealer.fourthCardValue = getCardValue(dealerFourthCard);
                                                 dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                                 Console.WriteLine("The dealer got a " + dealerFourthCard + ". Their total is now " + dealerCardTotal);
-                                                if (dealerCardTotal > 21)
+                                                if (dealer.CheckWhetherBust(dealerCardTotal))
                                                 {
                                                     Console.WriteLine("The dealer is bust. You win.");
                                                     Console.WriteLine("Press any key to replay");
@@ -589,7 +574,7 @@ namespace BlackJack
                                                     dealer.fifthCardValue = getCardValue(dealerFifthCard);
                                                     dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                                     Console.WriteLine("The dealer got a " + dealerFifthCard + ". Their total is now " + dealerCardTotal);
-                                                    if (dealerCardTotal > 21)
+                                                    if (dealer.CheckWhetherBust(dealerCardTotal))
                                                     {
                                                         Console.WriteLine("The dealer is bust. You win.");
                                                         Console.WriteLine("Press any key to replay");
@@ -635,11 +620,11 @@ namespace BlackJack
             return selectedCard;
         }
 
-        public void addCardToChosenCardArray(string selectedCard, int arraySlotRow)
+        /*public void addCardToChosenCardArray(string selectedCard, int arraySlotRow)
         {
             selectedCardArray[0] = selectedCard;
             selectedCardArraySlotRow = selectedCardArraySlotRow + 1;
-        }
+        }*/
 
         public bool confirmCardIsNotDuplicate(string[] selectedCardList)
         {
@@ -752,7 +737,7 @@ namespace BlackJack
             return total;
         }*/
 
-        public bool checkWhetherBust(int currentTotal)
+        /*public bool checkWhetherBust(int currentTotal)
         {
             bool isPlayerBust;
 
@@ -765,7 +750,7 @@ namespace BlackJack
             }
 
             return isPlayerBust;
-        }
+        }*/
 
 
     }

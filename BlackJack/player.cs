@@ -25,14 +25,14 @@ namespace BlackJack
             clearPlayerTotals();
         }
 
-        public void PlayerTwist()
+        public void PlayerTwist(string userInput)
         {
-
+            
         }
 
-        public void PlayerStick()
+        public void PlayerStick(string userInput)
         {
-
+            
         }
 
         public void ExitGame()
@@ -61,6 +61,22 @@ namespace BlackJack
             cardTotal = firstCardValue + secondCardValue + thirdCardValue + fourthCardValue + fifthCardValue;
 
             return cardTotal;
+        }
+
+        public bool CheckWhetherBust(int cardTotal)
+        {
+            bool IsPlayerBust;
+
+            if (cardTotal > 21)
+            {
+                IsPlayerBust = true;
+            } 
+            else
+            {
+                IsPlayerBust = false;
+            }
+
+            return IsPlayerBust;
         }
 
     }
