@@ -8,11 +8,6 @@ namespace BlackJack
 {
     class Player
     {
-        string firstCard;
-        string secondCard;
-        string thirdCard;
-        string fourthCard;
-        string fifthCard;
 
         public int firstCardValue;
         public int secondCardValue;
