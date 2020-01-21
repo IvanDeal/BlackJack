@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 namespace BlackJack
 {
     /*
-     Version 1.0 of my Blackjack game. Base project complete. Things to imoprove/add/change in future versions
+     Version 1.5 of my Blackjack game. Base project complete. Things to imoprove/add/change in future versions
      1) Move objects into classes for easier management and tidyness
-     2) Add check for duplicate cards being drawn (simulating a single deck game)
-     3) Add visuals/graphics
-     4) Game loop
-     5) Add currency to wager?
-     6) Extended blackjack rules such as splits and having a blackjack and an ace
+     2) Add visuals/graphics
+     3) Game loop
+     4) Add currency to wager?
+     5) Extended blackjack rules such as splits and having a blackjack and an ace
      6) Ace is currently only worth 1, need to add option for 11
      7) I think there are also rules about minimum numbers to stick on.....16 maybe? Need to find those.
      8) Multiple players?
@@ -37,6 +36,8 @@ namespace BlackJack
         public PlayingCard dealerFourthCard;
         public PlayingCard dealerFifthCard;
 
+        //public PlayingCard selectedCard;
+
         public int dealerCardTotal;
 
         public int selectedCardArraySlotRow = 0;
@@ -44,6 +45,8 @@ namespace BlackJack
         Random random = new Random();
 
         public List<PlayingCard> DeckList = new List<PlayingCard>();
+        public List<PlayingCard> PlayerHand = new List<PlayingCard>();
+        public List<PlayingCard> DealerHand = new List<PlayingCard>();
 
         public BlackJackGame()
         {
@@ -76,13 +79,26 @@ namespace BlackJack
                         DeckList.Add(card);
                     };
                 }
-
+                
                 playerFirstCard = selectACard(DeckList);
                 player.firstCardValue = playerFirstCard.cardValue;
+                
+                /*
+                selectedCard = selectACard(DeckList);
+                PlayerHand.Add(selectedCard);
+
+                selectedCard = selectACard(DeckList);
+                PlayerHand.Add(selectedCard);
+                playerCardTotal = player.addHand(PlayerHand);
+
+                playerCardTotal = player.addHand(PlayerHand);
+                Console.WriteLine(playerCardTotal);*/
                 
                 playerSecondCard = selectACard(DeckList);
                 player.secondCardValue = playerSecondCard.cardValue;
                 playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
+                
+                //Console.WriteLine(playerCardTotal);
 
                 dealerFirstCard = selectACard(DeckList);
                 dealer.firstCardValue = dealerFirstCard.cardValue;
@@ -104,15 +120,11 @@ namespace BlackJack
                     Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                     if (playerCardTotal < dealerCardTotal)
                     {
-                        Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
-                        Console.WriteLine("Press any key to replay");
-                        Console.ReadLine();
+                        player.DealerWinsWithHigherTotal();
                     }
                     else if (playerCardTotal == dealerCardTotal)
                     {
-                        Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
-                        Console.WriteLine("Press any key to replay");
-                        Console.ReadLine();
+                        player.DealerEqualsPlayerScore();
                     }
                     else if (playerCardTotal > dealerCardTotal)
                     {
@@ -123,21 +135,15 @@ namespace BlackJack
                         Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
                         if (dealer.CheckWhetherBust(dealerCardTotal))
                         {
-                            Console.WriteLine("The dealer is bust. You win.");
-                            Console.WriteLine("Press any key to replay");
-                            Console.ReadLine();
+                            player.DealerIsBust();
                         }
                         else if (dealerCardTotal == playerCardTotal)
                         {
-                            Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                            Console.WriteLine("Press any key to replay");
-                            Console.ReadLine();
+                            player.DealerEqualsPlayerScore();
                         }
                         else if (dealerCardTotal > playerCardTotal)
                         {
-                            Console.WriteLine("The dealer has beaten your score and has won.");
-                            Console.WriteLine("Press any key to replay");
-                            Console.ReadLine();
+                            player.DealerWinsWithHigherTotal();
                         }
                         else if (dealerCardTotal < playerCardTotal)
                         {
@@ -148,21 +154,15 @@ namespace BlackJack
                             Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
                             if (dealerCardTotal > 21)
                             {
-                                Console.WriteLine("The dealer is bust. You win.");
-                                Console.WriteLine("Press any key to replay");
-                                Console.ReadLine();
+                                player.DealerIsBust();
                             }
                             else if (dealerCardTotal == playerCardTotal)
                             {
-                                Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                Console.WriteLine("Press any key to replay");
-                                Console.ReadLine();
+                                player.DealerEqualsPlayerScore();
                             }
                             else if (dealerCardTotal > playerCardTotal)
                             {
-                                Console.WriteLine("The dealer has beaten your score and has won.");
-                                Console.WriteLine("Press any key to replay");
-                                Console.ReadLine();
+                                player.DealerWinsWithHigherTotal();
                             }
                             else if (dealerCardTotal < playerCardTotal)
                             {
@@ -173,21 +173,15 @@ namespace BlackJack
                                 Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                 if (dealer.CheckWhetherBust(dealerCardTotal))
                                 {
-                                    Console.WriteLine("The dealer is bust. You win.");
-                                    Console.WriteLine("Press any key to replay");
-                                    Console.ReadLine();
+                                    player.DealerIsBust();
                                 }
                                 else if (dealerCardTotal == playerCardTotal)
                                 {
-                                    Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                    Console.WriteLine("Press any key to replay");
-                                    Console.ReadLine();
+                                    player.DealerEqualsPlayerScore();
                                 }
                                 else if (dealerCardTotal > playerCardTotal)
                                 {
-                                    Console.WriteLine("The dealer has beaten your score and has won.");
-                                    Console.WriteLine("Press any key to replay");
-                                    Console.ReadLine();
+                                    player.DealerWinsWithHigherTotal();
                                 }
                                 else if (dealerCardTotal < playerCardTotal)
                                 {
@@ -226,15 +220,11 @@ namespace BlackJack
                             Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                             if (playerCardTotal < dealerCardTotal)
                             {
-                                Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
-                                Console.WriteLine("Press any key to replay");
-                                Console.ReadLine();
+                                player.DealerWinsWithHigherTotal();
                             }
                             else if (playerCardTotal == dealerCardTotal)
                             {
-                                Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
-                                Console.WriteLine("Press any key to replay");
-                                Console.ReadLine();
+                                player.DealerEqualsPlayerScore();
                             }
                             else if (playerCardTotal > dealerCardTotal)
                             {
@@ -245,21 +235,15 @@ namespace BlackJack
                                 Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                 if (dealer.CheckWhetherBust(dealerCardTotal))
                                 {
-                                    Console.WriteLine("The dealer is bust. You win.");
-                                    Console.WriteLine("Press any key to replay");
-                                    Console.ReadLine();
+                                    player.DealerIsBust();
                                 }
                                 else if (dealerCardTotal == playerCardTotal)
                                 {
-                                    Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                    Console.WriteLine("Press any key to replay");
-                                    Console.ReadLine();
+                                    player.DealerEqualsPlayerScore();
                                 }
                                 else if (dealerCardTotal > playerCardTotal)
                                 {
-                                    Console.WriteLine("The dealer has beaten your score and has won.");
-                                    Console.WriteLine("Press any key to replay");
-                                    Console.ReadLine();
+                                    player.DealerWinsWithHigherTotal();
                                 }
                                 else if (dealerCardTotal < playerCardTotal)
                                 {
@@ -270,21 +254,15 @@ namespace BlackJack
                                     Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                     if (dealer.CheckWhetherBust(dealerCardTotal))
                                     {
-                                        Console.WriteLine("The dealer is bust. You win.");
-                                        Console.WriteLine("Press any key to replay");
-                                        Console.ReadLine();
+                                        player.DealerIsBust();
                                     }
                                     else if (dealerCardTotal == playerCardTotal)
                                     {
-                                        Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                        Console.WriteLine("Press any key to replay");
-                                        Console.ReadLine();
+                                        player.DealerEqualsPlayerScore();
                                     }
                                     else if (dealerCardTotal > playerCardTotal)
                                     {
-                                        Console.WriteLine("The dealer has beaten your score and has won.");
-                                        Console.WriteLine("Press any key to replay");
-                                        Console.ReadLine();
+                                        player.DealerWinsWithHigherTotal();
                                     }
                                     else if (dealerCardTotal < playerCardTotal)
                                     {
@@ -295,21 +273,15 @@ namespace BlackJack
                                         Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                         if (dealer.CheckWhetherBust(dealerCardTotal))
                                         {
-                                            Console.WriteLine("The dealer is bust. You win.");
-                                            Console.WriteLine("Press any key to replay");
-                                            Console.ReadLine();
+                                            player.DealerIsBust();
                                         }
                                         else if (dealerCardTotal == playerCardTotal)
                                         {
-                                            Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                            Console.WriteLine("Press any key to replay");
-                                            Console.ReadLine();
+                                            player.DealerEqualsPlayerScore();
                                         }
                                         else if (dealerCardTotal > playerCardTotal)
                                         {
-                                            Console.WriteLine("The dealer has beaten your score and has won.");
-                                            Console.WriteLine("Press any key to replay");
-                                            Console.ReadLine();
+                                            player.DealerWinsWithHigherTotal();
                                         }
                                         else if (dealerCardTotal < playerCardTotal)
                                         {
@@ -348,15 +320,11 @@ namespace BlackJack
                                     Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                                     if (playerCardTotal < dealerCardTotal)
                                     {
-                                        Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
-                                        Console.WriteLine("Press any key to replay");
-                                        Console.ReadLine();
+                                        player.DealerWinsWithHigherTotal();
                                     }
                                     else if (playerCardTotal == dealerCardTotal)
                                     {
-                                        Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
-                                        Console.WriteLine("Press any key to replay");
-                                        Console.ReadLine();
+                                        player.DealerEqualsPlayerScore();
                                     }
                                     else if (playerCardTotal > dealerCardTotal)
                                     {
@@ -367,21 +335,15 @@ namespace BlackJack
                                         Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                         if (dealer.CheckWhetherBust(dealerCardTotal))
                                         {
-                                            Console.WriteLine("The dealer is bust. You win.");
-                                            Console.WriteLine("Press any key to replay");
-                                            Console.ReadLine();
+                                            player.DealerIsBust();
                                         }
                                         else if (dealerCardTotal == playerCardTotal)
                                         {
-                                            Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                            Console.WriteLine("Press any key to replay");
-                                            Console.ReadLine();
+                                            player.DealerEqualsPlayerScore();
                                         }
                                         else if (dealerCardTotal > playerCardTotal)
                                         {
-                                            Console.WriteLine("The dealer has beaten your score and has won.");
-                                            Console.WriteLine("Press any key to replay");
-                                            Console.ReadLine();
+                                            player.DealerWinsWithHigherTotal();
                                         }
                                         else if (dealerCardTotal < playerCardTotal)
                                         {
@@ -392,21 +354,15 @@ namespace BlackJack
                                             Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                             if (dealer.CheckWhetherBust(dealerCardTotal))
                                             {
-                                                Console.WriteLine("The dealer is bust. You win.");
-                                                Console.WriteLine("Press any key to replay");
-                                                Console.ReadLine();
+                                                player.DealerIsBust();
                                             }
                                             else if (dealerCardTotal == playerCardTotal)
                                             {
-                                                Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                                Console.WriteLine("Press any key to replay");
-                                                Console.ReadLine();
+                                                player.DealerEqualsPlayerScore();
                                             }
                                             else if (dealerCardTotal > playerCardTotal)
                                             {
-                                                Console.WriteLine("The dealer has beaten your score and has won.");
-                                                Console.WriteLine("Press any key to replay");
-                                                Console.ReadLine();
+                                                player.DealerWinsWithHigherTotal();
                                             }
                                             else if (dealerCardTotal < playerCardTotal)
                                             {
@@ -417,21 +373,15 @@ namespace BlackJack
                                                 Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                                 if (dealer.CheckWhetherBust(dealerCardTotal))
                                                 {
-                                                    Console.WriteLine("The dealer is bust. You win.");
-                                                    Console.WriteLine("Press any key to replay");
-                                                    Console.ReadLine();
+                                                    player.DealerIsBust();
                                                 }
                                                 else if (dealerCardTotal == playerCardTotal)
                                                 {
-                                                    Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                                    Console.WriteLine("Press any key to replay");
-                                                    Console.ReadLine();
+                                                    player.DealerEqualsPlayerScore();
                                                 }
                                                 else if (dealerCardTotal > playerCardTotal)
                                                 {
-                                                    Console.WriteLine("The dealer has beaten your score and has won.");
-                                                    Console.WriteLine("Press any key to replay");
-                                                    Console.ReadLine();
+                                                    player.DealerWinsWithHigherTotal();
                                                 }
                                                 else if (dealerCardTotal < playerCardTotal)
                                                 {
@@ -463,15 +413,11 @@ namespace BlackJack
                                         Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                                         if (playerCardTotal < dealerCardTotal)
                                         {
-                                            Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
-                                            Console.WriteLine("Press any key to replay");
-                                            Console.ReadLine();
+                                            player.DealerWinsWithHigherTotal();
                                         }
                                         else if (playerCardTotal == dealerCardTotal)
                                         {
-                                            Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
-                                            Console.WriteLine("Press any key to replay");
-                                            Console.ReadLine();
+                                            player.DealerEqualsPlayerScore();
                                         }
                                         else if (playerCardTotal > dealerCardTotal)
                                         {
@@ -482,21 +428,15 @@ namespace BlackJack
                                             Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                             if (dealer.CheckWhetherBust(dealerCardTotal))
                                             {
-                                                Console.WriteLine("The dealer is bust. You win.");
-                                                Console.WriteLine("Press any key to replay");
-                                                Console.ReadLine();
+                                                player.DealerIsBust();
                                             }
                                             else if (dealerCardTotal == playerCardTotal)
                                             {
-                                                Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                                Console.WriteLine("Press any key to replay");
-                                                Console.ReadLine();
+                                                player.DealerEqualsPlayerScore();
                                             }
                                             else if (dealerCardTotal > playerCardTotal)
                                             {
-                                                Console.WriteLine("The dealer has beaten your score and has won.");
-                                                Console.WriteLine("Press any key to replay");
-                                                Console.ReadLine();
+                                                player.DealerWinsWithHigherTotal();
                                             }
                                             else if (dealerCardTotal < playerCardTotal)
                                             {
@@ -507,21 +447,15 @@ namespace BlackJack
                                                 Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                                 if (dealer.CheckWhetherBust(dealerCardTotal))
                                                 {
-                                                    Console.WriteLine("The dealer is bust. You win.");
-                                                    Console.WriteLine("Press any key to replay");
-                                                    Console.ReadLine();
+                                                    player.DealerIsBust();
                                                 }
                                                 else if (dealerCardTotal == playerCardTotal)
                                                 {
-                                                    Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                                    Console.WriteLine("Press any key to replay");
-                                                    Console.ReadLine();
+                                                    player.DealerEqualsPlayerScore();
                                                 }
                                                 else if (dealerCardTotal > playerCardTotal)
                                                 {
-                                                    Console.WriteLine("The dealer has beaten your score and has won.");
-                                                    Console.WriteLine("Press any key to replay");
-                                                    Console.ReadLine();
+                                                    player.DealerWinsWithHigherTotal();
                                                 }
                                                 else if (dealerCardTotal < playerCardTotal)
                                                 {
@@ -532,21 +466,15 @@ namespace BlackJack
                                                     Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
                                                     if (dealer.CheckWhetherBust(dealerCardTotal))
                                                     {
-                                                        Console.WriteLine("The dealer is bust. You win.");
-                                                        Console.WriteLine("Press any key to replay");
-                                                        Console.ReadLine();
+                                                        player.DealerIsBust();
                                                     }
                                                     else if (dealerCardTotal == playerCardTotal)
                                                     {
-                                                        Console.WriteLine("Ooooh, so close but i'm afraid the dealer has matched your score and has won.");
-                                                        Console.WriteLine("Press any key to replay");
-                                                        Console.ReadLine();
+                                                        player.DealerEqualsPlayerScore();
                                                     }
                                                     else if (dealerCardTotal > playerCardTotal)
                                                     {
-                                                        Console.WriteLine("The dealer has beaten your score and has won.");
-                                                        Console.WriteLine("Press any key to replay");
-                                                        Console.ReadLine();
+                                                        player.DealerWinsWithHigherTotal();
                                                     }
                                                     else if (dealerCardTotal < playerCardTotal)
                                                     {

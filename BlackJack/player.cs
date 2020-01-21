@@ -40,30 +40,27 @@ namespace BlackJack
 
         }
 
-        public void SelectFirstCard()
+        public void DealerIsBust()
         {
-
+            Console.WriteLine("The dealer is bust. You win.");
+            Console.WriteLine("Press any key to replay");
+            Console.ReadLine();
         }
 
-        public void SelectSecondCard()
+        public void DealerWinsWithHigherTotal()
         {
-
+            Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
+            Console.WriteLine("Press any key to replay");
+            Console.ReadLine();
         }
 
-        public void SelectThirdCard()
+        public void DealerEqualsPlayerScore()
         {
-
+            Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
+            Console.WriteLine("Press any key to replay");
+            Console.ReadLine();
         }
 
-        public void SelectFourthCard()
-        {
-
-        }
-
-        public void SelectFifthCard()
-        {
-
-        }
 
         public void clearPlayerTotals()
         {
@@ -83,11 +80,25 @@ namespace BlackJack
             return cardTotal;
         }
 
+        //Useless at the moment....needed?
+        public int addHand(List<PlayingCard> hand)
+        {
+            int result = 0;
+            int value = 0;
+
+            foreach (PlayingCard card in hand){
+                value = card.cardValue;
+                //add value to result.
+                    result = result + value;
+                    }
+            return result;
+        }
+
+
         public bool DoesPlayerBeatDealer(int playerCardTotal, int dealerCardTotal)
         {
             if (playerCardTotal > dealerCardTotal)
             {
-                
 
                 return true;
             } 
