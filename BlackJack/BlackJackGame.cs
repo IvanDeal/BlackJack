@@ -22,8 +22,7 @@ namespace BlackJack
 
     class BlackJackGame
     {
-        //Player player = new Player();
-        //Player dealer = new Player();
+        public Dictionary<string, int> cardNamesAndValues = new Dictionary<string, int>();
 
         public int playerCardTotal;
         public PlayingCard playerFirstCard;
@@ -43,12 +42,24 @@ namespace BlackJack
         public int selectedCardArraySlotRow = 0;
 
         Random random = new Random();
-        
-        public PlayingCard[] DeckArray = new PlayingCard[52]; //single dimensional array?
-        
+
+        public List<PlayingCard> DeckList = new List<PlayingCard>();
 
         public BlackJackGame()
         {
+            cardNamesAndValues.Add("Ace", 1);
+            cardNamesAndValues.Add("Two", 2);
+            cardNamesAndValues.Add("Three", 3);
+            cardNamesAndValues.Add("Four", 4);
+            cardNamesAndValues.Add("Five", 5);
+            cardNamesAndValues.Add("Six", 6);
+            cardNamesAndValues.Add("Seven", 7);
+            cardNamesAndValues.Add("Eight", 8);
+            cardNamesAndValues.Add("Nine", 9);
+            cardNamesAndValues.Add("Ten", 10);
+            cardNamesAndValues.Add("Jack", 10);
+            cardNamesAndValues.Add("Queen", 10);
+            cardNamesAndValues.Add("King", 10);
 
             while (true)
             {
@@ -56,128 +67,26 @@ namespace BlackJack
                 Player player = new Player();
                 Player dealer = new Player();
 
-                //Hearts
-                PlayingCard aceOfHearts = new PlayingCard(CardNameList.Ace, "Hearts");
-                PlayingCard twoOfHearts = new PlayingCard(CardNameList.Two, "Hearts");
-                PlayingCard threeOfHearts = new PlayingCard(CardNameList.Three, "Hearts");
-                PlayingCard fourOfHearts = new PlayingCard(CardNameList.Four, "Hearts");
-                PlayingCard fiveOfHearts = new PlayingCard(CardNameList.Five, "Hearts");
-                PlayingCard sixOfHearts = new PlayingCard(CardNameList.Six, "Hearts");
-                PlayingCard sevenOfHearts = new PlayingCard(CardNameList.Seven, "Hearts");
-                PlayingCard eightOfHearts = new PlayingCard(CardNameList.Eight, "Hearts");
-                PlayingCard nineOfHearts = new PlayingCard(CardNameList.Nine, "Hearts");
-                PlayingCard tenOfHearts = new PlayingCard(CardNameList.Ten, "Hearts");
-                PlayingCard jackOfHearts = new PlayingCard(CardNameList.Jack, "Hearts");
-                PlayingCard queenOfHearts = new PlayingCard(CardNameList.Queen, "Hearts");
-                PlayingCard kingOfHearts = new PlayingCard(CardNameList.King, "Hearts");
-                //Diamonds
-                PlayingCard aceOfDiamonds = new PlayingCard(CardNameList.Ace, "Diamonds");
-                PlayingCard twoOfDiamonds = new PlayingCard(CardNameList.Two, "Diamonds");
-                PlayingCard threeOfDiamonds = new PlayingCard(CardNameList.Three, "Diamonds");
-                PlayingCard fourOfDiamonds = new PlayingCard(CardNameList.Four, "Diamonds");
-                PlayingCard fiveOfDiamonds = new PlayingCard(CardNameList.Five, "Diamonds");
-                PlayingCard sixOfDiamonds = new PlayingCard(CardNameList.Six, "Diamonds");
-                PlayingCard sevenOfDiamonds = new PlayingCard(CardNameList.Seven, "Diamonds");
-                PlayingCard eightOfDiamonds = new PlayingCard(CardNameList.Eight, "Diamonds");
-                PlayingCard nineOfDiamonds = new PlayingCard(CardNameList.Nine, "Diamonds");
-                PlayingCard tenOfDiamonds = new PlayingCard(CardNameList.Ten, "Diamonds");
-                PlayingCard jackOfDiamonds = new PlayingCard(CardNameList.Jack, "Diamonds");
-                PlayingCard queenOfDiamonds = new PlayingCard(CardNameList.Queen, "Diamonds");
-                PlayingCard kingOfDiamonds = new PlayingCard(CardNameList.King, "Diamonds");
-                //Clubs
-                PlayingCard aceOfClubs = new PlayingCard(CardNameList.Ace, "Clubs");
-                PlayingCard twoOfClubs = new PlayingCard(CardNameList.Two, "Clubs");
-                PlayingCard threeOfClubs = new PlayingCard(CardNameList.Three, "Clubs");
-                PlayingCard fourOfClubs = new PlayingCard(CardNameList.Four, "Clubs");
-                PlayingCard fiveOfClubs = new PlayingCard(CardNameList.Five, "Clubs");
-                PlayingCard sixOfClubs = new PlayingCard(CardNameList.Six, "Clubs");
-                PlayingCard sevenOfClubs = new PlayingCard(CardNameList.Seven, "Clubs");
-                PlayingCard eightOfClubs = new PlayingCard(CardNameList.Eight, "Clubs");
-                PlayingCard nineOfClubs = new PlayingCard(CardNameList.Nine, "Clubs");
-                PlayingCard tenOfClubs = new PlayingCard(CardNameList.Ten, "Clubs");
-                PlayingCard jackOfClubs = new PlayingCard(CardNameList.Jack, "Clubs");
-                PlayingCard queenOfClubs = new PlayingCard(CardNameList.Queen, "Clubs");
-                PlayingCard kingOfClubs = new PlayingCard(CardNameList.King, "Clubs");
-                //Spades
-                PlayingCard aceOfSpades = new PlayingCard(CardNameList.Ace, "Spades");
-                PlayingCard twoOfSpades = new PlayingCard(CardNameList.Two, "Spades");
-                PlayingCard threeOfSpades = new PlayingCard(CardNameList.Three, "Spades");
-                PlayingCard fourOfSpades = new PlayingCard(CardNameList.Four, "Spades");
-                PlayingCard fiveOfSpades = new PlayingCard(CardNameList.Five, "Spades");
-                PlayingCard sixOfSpades = new PlayingCard(CardNameList.Six, "Spades");
-                PlayingCard sevenOfSpades = new PlayingCard(CardNameList.Seven, "Spades");
-                PlayingCard eightOfSpades = new PlayingCard(CardNameList.Eight, "Spades");
-                PlayingCard nineOfSpades = new PlayingCard(CardNameList.Nine, "Spades");
-                PlayingCard tenOfSpades = new PlayingCard(CardNameList.Ten, "Spades");
-                PlayingCard jackOfSpades = new PlayingCard(CardNameList.Jack, "Spades");
-                PlayingCard queenOfSpades = new PlayingCard(CardNameList.Queen, "Spades");
-                PlayingCard kingOfSpades = new PlayingCard(CardNameList.King, "Spades");
-                //player.clearPlayerTotals();
-                //dealer.clearPlayerTotals();
+                foreach (CardSuitList suit in Enum.GetValues(typeof(CardSuitList)))
+                {
+                    foreach (KeyValuePair<string, int> cardName in cardNamesAndValues)
+                    {
+                        
+                        PlayingCard card = new PlayingCard(cardName.Key, suit.ToString(), cardName.Value);
+                        DeckList.Add(card);
+                    };
+                }
 
-                DeckArray[0] = aceOfSpades;
-                DeckArray[1] = aceOfHearts;
-                DeckArray[2] = aceOfDiamonds;
-                DeckArray[3] = aceOfClubs;
-                DeckArray[4] = twoOfSpades;
-                DeckArray[5] = twoOfHearts;
-                DeckArray[6] = twoOfDiamonds;
-                DeckArray[7] = twoOfClubs;
-                DeckArray[8] = threeOfSpades;
-                DeckArray[9] = threeOfHearts;
-                DeckArray[10] = threeOfDiamonds;
-                DeckArray[11] = threeOfClubs;
-                DeckArray[12] = fourOfSpades;
-                DeckArray[13] = fourOfHearts;
-                DeckArray[14] = fourOfDiamonds;
-                DeckArray[15] = fourOfClubs;
-                DeckArray[16] = fiveOfSpades;
-                DeckArray[17] = fiveOfHearts;
-                DeckArray[18] = fiveOfDiamonds;
-                DeckArray[19] = fiveOfClubs;
-                DeckArray[20] = sixOfSpades;
-                DeckArray[21] = sixOfHearts;
-                DeckArray[22] = sixOfDiamonds;
-                DeckArray[23] = sixOfClubs;
-                DeckArray[24] = sevenOfSpades;
-                DeckArray[25] = sevenOfHearts;
-                DeckArray[26] = sevenOfDiamonds;
-                DeckArray[27] = sevenOfClubs;
-                DeckArray[28] = eightOfSpades;
-                DeckArray[29] = eightOfHearts;
-                DeckArray[30] = eightOfDiamonds;
-                DeckArray[31] = eightOfClubs;
-                DeckArray[32] = nineOfSpades;
-                DeckArray[33] = nineOfHearts;
-                DeckArray[34] = nineOfDiamonds;
-                DeckArray[35] = nineOfClubs;
-                DeckArray[36] = tenOfSpades;
-                DeckArray[37] = tenOfHearts;
-                DeckArray[38] = tenOfDiamonds;
-                DeckArray[39] = tenOfClubs;
-                DeckArray[40] = jackOfSpades;
-                DeckArray[41] = jackOfHearts;
-                DeckArray[42] = jackOfDiamonds;
-                DeckArray[43] = jackOfClubs;
-                DeckArray[44] = queenOfSpades;
-                DeckArray[45] = queenOfHearts;
-                DeckArray[46] = queenOfDiamonds;
-                DeckArray[47] = queenOfClubs;
-                DeckArray[48] = kingOfSpades;
-                DeckArray[49] = kingOfHearts;
-                DeckArray[50] = kingOfDiamonds;
-                DeckArray[51] = kingOfClubs;
-
-                playerFirstCard = selectACard(DeckArray);
+                playerFirstCard = selectACard(DeckList);
                 player.firstCardValue = playerFirstCard.cardValue;
                 
-                playerSecondCard = selectACard(DeckArray);
+                playerSecondCard = selectACard(DeckList);
                 player.secondCardValue = playerSecondCard.cardValue;
                 playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
 
-                dealerFirstCard = selectACard(DeckArray);
+                dealerFirstCard = selectACard(DeckList);
                 dealer.firstCardValue = dealerFirstCard.cardValue;
-                dealerSecondCard = selectACard(DeckArray);
+                dealerSecondCard = selectACard(DeckList);
                 dealer.secondCardValue = dealerSecondCard.cardValue;
                 dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
 
@@ -208,7 +117,7 @@ namespace BlackJack
                     else if (playerCardTotal > dealerCardTotal)
                     {
                         Console.WriteLine("The Dealer Twists.");
-                        dealerThirdCard = selectACard(DeckArray);
+                        dealerThirdCard = selectACard(DeckList);
                         dealer.thirdCardValue = dealerThirdCard.cardValue;
                         dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                         Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -233,7 +142,7 @@ namespace BlackJack
                         else if (dealerCardTotal < playerCardTotal)
                         {
                             Console.WriteLine("The dealer twists.");
-                            dealerFourthCard = selectACard(DeckArray);
+                            dealerFourthCard = selectACard(DeckList);
                             dealer.fourthCardValue = dealerFourthCard.cardValue;
                             dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                             Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -258,7 +167,7 @@ namespace BlackJack
                             else if (dealerCardTotal < playerCardTotal)
                             {
                                 Console.WriteLine("The dealer twists.");
-                                dealerFifthCard = selectACard(DeckArray);
+                                dealerFifthCard = selectACard(DeckList);
                                 dealer.fifthCardValue = dealerFifthCard.cardValue;
                                 dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                 Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -289,12 +198,11 @@ namespace BlackJack
                             }
                         }
                     }
-
                 } 
                 else if (userInputLower == "t" || userInputLower == "twist")
                 {
                     Console.WriteLine("You draw another card.");
-                    playerThirdCard = selectACard(DeckArray);
+                    playerThirdCard = selectACard(DeckList);
                     player.thirdCardValue = playerThirdCard.cardValue;
                     playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
                     if (player.CheckWhetherBust(playerCardTotal))
@@ -331,7 +239,7 @@ namespace BlackJack
                             else if (playerCardTotal > dealerCardTotal)
                             {
                                 Console.WriteLine("The Dealer Twists.");
-                                dealerThirdCard = selectACard(DeckArray);
+                                dealerThirdCard = selectACard(DeckList);
                                 dealer.thirdCardValue = dealerThirdCard.cardValue;
                                 dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                 Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -356,7 +264,7 @@ namespace BlackJack
                                 else if (dealerCardTotal < playerCardTotal)
                                 {
                                     Console.WriteLine("The dealer twists.");
-                                    dealerFourthCard = selectACard(DeckArray);
+                                    dealerFourthCard = selectACard(DeckList);
                                     dealer.fourthCardValue = dealerFourthCard.cardValue;
                                     dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                     Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -381,7 +289,7 @@ namespace BlackJack
                                     else if (dealerCardTotal < playerCardTotal)
                                     {
                                         Console.WriteLine("The dealer twists.");
-                                        dealerFifthCard = selectACard(DeckArray);
+                                        dealerFifthCard = selectACard(DeckList);
                                         dealer.fifthCardValue = dealerFifthCard.cardValue;
                                         dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                         Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -412,12 +320,11 @@ namespace BlackJack
                                     }
                                 }
                             }
-
                         }
                         else if (userInputLower == "t" || userInputLower == "twist")
                         {
                             Console.WriteLine("You draw another card.");
-                            playerFourthCard = selectACard(DeckArray);
+                            playerFourthCard = selectACard(DeckList);
                             player.fourthCardValue = playerFourthCard.cardValue;
                             playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
                             if (player.CheckWhetherBust(playerCardTotal))
@@ -454,7 +361,7 @@ namespace BlackJack
                                     else if (playerCardTotal > dealerCardTotal)
                                     {
                                         Console.WriteLine("The Dealer Twists.");
-                                        dealerThirdCard = selectACard(DeckArray);
+                                        dealerThirdCard = selectACard(DeckList);
                                         dealer.thirdCardValue = dealerThirdCard.cardValue;
                                         dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                         Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -479,7 +386,7 @@ namespace BlackJack
                                         else if (dealerCardTotal < playerCardTotal)
                                         {
                                             Console.WriteLine("The dealer twists.");
-                                            dealerFourthCard = selectACard(DeckArray);
+                                            dealerFourthCard = selectACard(DeckList);
                                             dealer.fourthCardValue = dealerFourthCard.cardValue;
                                             dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                             Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -504,7 +411,7 @@ namespace BlackJack
                                             else if (dealerCardTotal < playerCardTotal)
                                             {
                                                 Console.WriteLine("The dealer twists.");
-                                                dealerFifthCard = selectACard(DeckArray);
+                                                dealerFifthCard = selectACard(DeckList);
                                                 dealer.fifthCardValue = dealerFifthCard.cardValue;
                                                 dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                                 Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -540,7 +447,7 @@ namespace BlackJack
                                 else if (userInputLower == "t" || userInputLower == "twist")
                                 {
                                     Console.WriteLine("You draw another card.");
-                                    playerFifthCard = selectACard(DeckArray);
+                                    playerFifthCard = selectACard(DeckList);
                                     player.fifthCardValue = playerFifthCard.cardValue;
                                     playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
                                     if (player.CheckWhetherBust(playerCardTotal))
@@ -569,7 +476,7 @@ namespace BlackJack
                                         else if (playerCardTotal > dealerCardTotal)
                                         {
                                             Console.WriteLine("The Dealer Twists.");
-                                            dealerThirdCard = selectACard(DeckArray);
+                                            dealerThirdCard = selectACard(DeckList);
                                             dealer.thirdCardValue = dealerThirdCard.cardValue;
                                             dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                             Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -594,7 +501,7 @@ namespace BlackJack
                                             else if (dealerCardTotal < playerCardTotal)
                                             {
                                                 Console.WriteLine("The dealer twists.");
-                                                dealerFourthCard = selectACard(DeckArray);
+                                                dealerFourthCard = selectACard(DeckList);
                                                 dealer.fourthCardValue = dealerFourthCard.cardValue;
                                                 dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                                 Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -619,7 +526,7 @@ namespace BlackJack
                                                 else if (dealerCardTotal < playerCardTotal)
                                                 {
                                                     Console.WriteLine("The dealer twists.");
-                                                    dealerFifthCard = selectACard(DeckArray);
+                                                    dealerFifthCard = selectACard(DeckList);
                                                     dealer.fifthCardValue = dealerFifthCard.cardValue;
                                                     dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
                                                     Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
@@ -659,17 +566,18 @@ namespace BlackJack
             }
         }
 
-        public PlayingCard selectACard(PlayingCard[] PassedDeckArray)
+        public PlayingCard selectACard(List<PlayingCard> PassedDeckArray)
         {
                 PlayingCard selectedCard;
 
-                int selectecCardnumber = random.Next(1, 52);
-                selectedCard = PassedDeckArray[selectecCardnumber];
+                int selectedCardnumber = random.Next(1, 52);
+                selectedCard = PassedDeckArray[selectedCardnumber];
 
             return selectedCard;
         }
 
-
+        //Don't think I need this. Blackjack is usually played with multiple decks so duplicates do happen.
+        /*
         public bool confirmCardIsNotDuplicate(string[] selectedCardList)
         {
             List<string> val = new List<string>();
@@ -684,7 +592,7 @@ namespace BlackJack
 
             }
             return cardCheckResult;
-        }
+        }*/ 
 
     }
 }

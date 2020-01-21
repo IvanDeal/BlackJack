@@ -22,12 +22,12 @@ namespace BlackJack
 
         public void PlayerTwist(string userInput)
         {
-            
+            Console.WriteLine("The dealer hands you a card.");
         }
 
         public void PlayerStick(string userInput)
         {
-            
+            Console.WriteLine("You stick.....was that wise?");
         }
 
         public void ExitGame()
@@ -36,6 +36,31 @@ namespace BlackJack
         }
 
         public void SelectACard()
+        {
+
+        }
+
+        public void SelectFirstCard()
+        {
+
+        }
+
+        public void SelectSecondCard()
+        {
+
+        }
+
+        public void SelectThirdCard()
+        {
+
+        }
+
+        public void SelectFourthCard()
+        {
+
+        }
+
+        public void SelectFifthCard()
         {
 
         }
@@ -58,6 +83,32 @@ namespace BlackJack
             return cardTotal;
         }
 
+        public bool DoesPlayerBeatDealer(int playerCardTotal, int dealerCardTotal)
+        {
+            if (playerCardTotal > dealerCardTotal)
+            {
+                
+
+                return true;
+            } 
+            else if (playerCardTotal == dealerCardTotal)
+            {
+                Console.WriteLine("i'm sorry, the dealer has matched your score and has won.");
+                Console.WriteLine("Press any key to replay");
+                Console.ReadLine();
+                return false;
+            }
+            else if (playerCardTotal < dealerCardTotal)
+            {
+                Console.WriteLine("I'm sorry, the dealer's total is higher and has won.");
+                Console.WriteLine("Press any key to replay");
+                Console.ReadLine();
+                return false;
+            }
+
+            return false;
+        }
+
         public bool CheckWhetherBust(int cardTotal)
         {
             bool IsPlayerBust;
@@ -73,6 +124,5 @@ namespace BlackJack
 
             return IsPlayerBust;
         }
-
     }
 }

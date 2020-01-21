@@ -6,44 +6,30 @@ using System.Threading.Tasks;
 
 namespace BlackJack
 {
-    public enum CardNameList
+    public enum CardSuitList
     {
-        Joker,
-        Ace,
-        Two,
-        Three,
-        Four,
-        Five,
-        Six,
-        Seven,
-        Eight,
-        Nine,
-        Ten,
-        Jack = 10,
-        Queen = 10,
-        King = 10,
+        Hearts,
+        Diamonds,
+        Spades,
+        Clubs
     }
-    
 
     class PlayingCard
     {
         public string cardSuit;
-        public string cardName; //Called name but names will mostly be numbers. It's a string to cover face cards
+        public string cardName;
         public int cardValue;
-       
-        // From PlayingCard parameters: string suit, string name, int scoreValue
 
-    public PlayingCard(CardNameList value, string suit)
+    public PlayingCard(string name, string suit, int value)
         {
-            cardName = value.ToString();
+            cardName = name;
             cardSuit = suit;
-            cardValue = (int)value;
+            cardValue = value;
         }
 
         public void removeCardFromDeck()
         {
 
         }
-
     }
 }

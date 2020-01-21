@@ -11,7 +11,7 @@ namespace BlackJack
         
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello, Welcome to my BlackJack game V1.0.");
+            Console.WriteLine("Hello, Welcome to my BlackJack game V1.5.");
             Console.WriteLine("If you would like to play please type (P)lay");
             string userInput = Console.ReadLine();
             string userInputLower = userInput.ToLower();
@@ -19,8 +19,6 @@ namespace BlackJack
             {
                 new BlackJackGame();
             }
-
         }
-
     }
 }
