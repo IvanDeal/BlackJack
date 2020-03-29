@@ -80,21 +80,6 @@ namespace BlackJack
             return cardTotal;
         }
 
-        //Useless at the moment....needed?
-        public int addHand(List<PlayingCard> hand)
-        {
-            int result = 0;
-            int value = 0;
-
-            foreach (PlayingCard card in hand){
-                value = card.cardValue;
-                //add value to result.
-                    result = result + value;
-                    }
-            return result;
-        }
-
-
         public bool DoesPlayerBeatDealer(int playerCardTotal, int dealerCardTotal)
         {
             if (playerCardTotal > dealerCardTotal)

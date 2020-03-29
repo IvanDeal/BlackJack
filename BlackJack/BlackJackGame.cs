@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BlackJack
 {
     /*
-     Version 1.5 of my Blackjack game. Base project complete. Things to imoprove/add/change in future versions
+     Version 1.5 of my Blackjack game. Base project complete. Things to improve/add/change in future versions
      1) Move objects into classes for easier management and tidyness
      2) Add visuals/graphics
      3) Game loop
@@ -35,8 +35,6 @@ namespace BlackJack
         public PlayingCard dealerThirdCard;
         public PlayingCard dealerFourthCard;
         public PlayingCard dealerFifthCard;
-
-        //public PlayingCard selectedCard;
 
         public int dealerCardTotal;
 
@@ -83,22 +81,9 @@ namespace BlackJack
                 playerFirstCard = selectACard(DeckList);
                 player.firstCardValue = playerFirstCard.cardValue;
                 
-                /*
-                selectedCard = selectACard(DeckList);
-                PlayerHand.Add(selectedCard);
-
-                selectedCard = selectACard(DeckList);
-                PlayerHand.Add(selectedCard);
-                playerCardTotal = player.addHand(PlayerHand);
-
-                playerCardTotal = player.addHand(PlayerHand);
-                Console.WriteLine(playerCardTotal);*/
-                
                 playerSecondCard = selectACard(DeckList);
                 player.secondCardValue = playerSecondCard.cardValue;
                 playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
-                
-                //Console.WriteLine(playerCardTotal);
 
                 dealerFirstCard = selectACard(DeckList);
                 dealer.firstCardValue = dealerFirstCard.cardValue;
@@ -502,25 +487,7 @@ namespace BlackJack
                 selectedCard = PassedDeckArray[selectedCardnumber];
 
             return selectedCard;
-        }
-
-        //Don't think I need this. Blackjack is usually played with multiple decks so duplicates do happen.
-        /*
-        public bool confirmCardIsNotDuplicate(string[] selectedCardList)
-        {
-            List<string> val = new List<string>();
-            bool cardCheckResult = false;
-            foreach(string card in selectedCardList)
-            {
-                if (val.Contains(card))
-                {
-                    cardCheckResult = true;
-                    break;
-                } 
-
-            }
-            return cardCheckResult;
-        }*/ 
+        } 
 
     }
 }
