@@ -8,6 +8,7 @@ namespace BlackJack
 {
     class Deck
     {
+        Random random = new Random();
         public Dictionary<string, int> cardNamesAndValues = new Dictionary<string, int>();
         public List<PlayingCard> DeckList = new List<PlayingCard>();
 
@@ -42,6 +43,16 @@ namespace BlackJack
                 };
             }
 
+        }
+
+        public PlayingCard SelectACard(List<PlayingCard> PassedDeckArray)
+        {
+            PlayingCard selectedCard;
+
+            int selectedCardnumber = random.Next(1, 52);
+            selectedCard = PassedDeckArray[selectedCardnumber];
+
+            return selectedCard;
         }
 
 

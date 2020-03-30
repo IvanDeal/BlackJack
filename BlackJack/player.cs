@@ -16,6 +16,8 @@ namespace BlackJack
         public int fourthCardValue;
         public int fifthCardValue;
 
+        public List<PlayingCard> PlayerHand = new List<PlayingCard>();
+
         public Player()
         {
             clearPlayerTotals();
@@ -23,7 +25,8 @@ namespace BlackJack
 
         public void getPlayerDecision(string userInput)
         {
-            if(userInput == "s")
+
+            if (userInput == "s")
             {
                 PlayerStick();
             }
@@ -31,18 +34,23 @@ namespace BlackJack
             {
                 PlayerTwist();
             }
+            else if (userInput == "exit")
+            {
+                ExitGame();
+            }
+
         }
 
         public void PlayerTwist()
         {
             Console.WriteLine("The dealer hands you a card.");
-            //SelectACard(game.deck.DeckList);
+            
         }
 
         public void PlayerStick()
         {
             Console.WriteLine("You stick.....was that wise?");
-            //SelectACard(deck.DeckList);
+            
         }
 
         public void ExitGame()
@@ -91,6 +99,7 @@ namespace BlackJack
             fifthCardValue = 0;
         }
 
+
         public int addCards(int firstCardValue, int secondCardValue, int thirdCardValue, int fourthCardValue, int fifthCardValue)
         {
             int cardTotal = 0;
@@ -104,7 +113,6 @@ namespace BlackJack
         {
             if (playerCardTotal > dealerCardTotal)
             {
-
                 return true;
             } 
             else if (playerCardTotal == dealerCardTotal)
@@ -140,5 +148,29 @@ namespace BlackJack
 
             return IsPlayerBust;
         }
+
+        public int GetPlayerCardTotal()
+        {
+            int cardTotal = 0;
+
+            foreach(PlayingCard card in PlayerHand)
+            {
+                cardTotal += card.cardValue;
+            }
+
+            return cardTotal;
+        }
+
+        public void RevealPlayerCards()
+        {
+            int i = 1;
+            foreach(PlayingCard card in PlayerHand)
+            {
+                Console.WriteLine("Card #" + i + " is the: " + card.cardName + " of " + card.cardSuit + ". Which is worth: " + card.cardValue);
+                i++;
+            }
+        }
+        
+
     }
 }

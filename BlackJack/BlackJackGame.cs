@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BlackJack
 {
     /*
-     Version 1.5 of my Blackjack game. Base project complete. Things to improve/add/change in future versions
+     Version 1.7 of my Blackjack game. Base project complete. Things to improve/add/change in future versions
      1) Move objects into classes for easier management and tidyness
      2) Add visuals/graphics
      3) Game loop
@@ -21,28 +21,13 @@ namespace BlackJack
 
     class BlackJackGame
     {
-        //public Dictionary<string, int> cardNamesAndValues = new Dictionary<string, int>();
 
         public int playerCardTotal;
-        public PlayingCard playerFirstCard;
-        public PlayingCard playerSecondCard;
-        public PlayingCard playerThirdCard;
-        public PlayingCard playerFourthCard;
-        public PlayingCard playerFifthCard;
-
-        public PlayingCard dealerFirstCard;
-        public PlayingCard dealerSecondCard;
-        public PlayingCard dealerThirdCard;
-        public PlayingCard dealerFourthCard;
-        public PlayingCard dealerFifthCard;
 
         public int dealerCardTotal;
 
         public int selectedCardArraySlotRow = 0;
 
-        Random random = new Random();
-
-        public List<PlayingCard> PlayerHand = new List<PlayingCard>();
         public List<PlayingCard> DealerHand = new List<PlayingCard>();
 
         public BlackJackGame()
@@ -53,31 +38,26 @@ namespace BlackJack
                 Player player = new Player();
                 Player dealer = new Player();
                 Deck deck = new Deck();
-                
-                playerFirstCard = selectACard(deck.DeckList);
-                player.firstCardValue = playerFirstCard.cardValue;
-                
-                playerSecondCard = selectACard(deck.DeckList);
-                player.secondCardValue = playerSecondCard.cardValue;
-                playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
 
-                dealerFirstCard = selectACard(deck.DeckList);
-                dealer.firstCardValue = dealerFirstCard.cardValue;
-                dealerSecondCard = selectACard(deck.DeckList);
-                dealer.secondCardValue = dealerSecondCard.cardValue;
-                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
+                player.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                player.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                playerCardTotal = player.GetPlayerCardTotal();
 
-                Console.WriteLine("Your first card is the: " + playerFirstCard.cardName + " of " + playerFirstCard.cardSuit + ". Which is worth: " + player.firstCardValue);
-                Console.WriteLine("Your second card is the: " + playerSecondCard.cardName + " of " + playerSecondCard.cardSuit + ". Which is worth: " + player.secondCardValue);
+                dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                dealerCardTotal = dealer.GetPlayerCardTotal();
+
+                player.RevealPlayerCards();
+
                 Console.WriteLine("Your current total is: " + playerCardTotal);
                 Console.WriteLine("Would you like to (S)tick or (T)wist?");
                 string userInput = Console.ReadLine();
                 string userInputLower = userInput.ToLower();
                 //PlayerInput round 1
-                if (userInputLower == "s" || userInputLower == "stick")
+
+                if (userInputLower == "s")
                 {
-                    Console.WriteLine("The dealer's first card is the: " + dealerFirstCard.cardName + " of " + dealerFirstCard.cardSuit + ". Which is worth: " + dealer.firstCardValue);
-                    Console.WriteLine("The dealer's second card is the: " + dealerSecondCard.cardName + " of " + dealerSecondCard.cardSuit + ". which is worth: " + dealer.secondCardValue);
+                    dealer.RevealPlayerCards();
                     Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                     if (playerCardTotal < dealerCardTotal)
                     {
@@ -90,10 +70,9 @@ namespace BlackJack
                     else if (playerCardTotal > dealerCardTotal)
                     {
                         Console.WriteLine("The Dealer Twists.");
-                        dealerThirdCard = selectACard(deck.DeckList);
-                        dealer.thirdCardValue = dealerThirdCard.cardValue;
-                        dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                        Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                        dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                        dealerCardTotal = dealer.GetPlayerCardTotal();
+                        dealer.RevealPlayerCards();
                         if (dealer.CheckWhetherBust(dealerCardTotal))
                         {
                             player.DealerIsBust();
@@ -109,10 +88,9 @@ namespace BlackJack
                         else if (dealerCardTotal < playerCardTotal)
                         {
                             Console.WriteLine("The dealer twists.");
-                            dealerFourthCard = selectACard(deck.DeckList);
-                            dealer.fourthCardValue = dealerFourthCard.cardValue;
-                            dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                            Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                            dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                            dealerCardTotal = dealer.GetPlayerCardTotal();
+                            dealer.RevealPlayerCards();
                             if (dealerCardTotal > 21)
                             {
                                 player.DealerIsBust();
@@ -128,10 +106,9 @@ namespace BlackJack
                             else if (dealerCardTotal < playerCardTotal)
                             {
                                 Console.WriteLine("The dealer twists.");
-                                dealerFifthCard = selectACard(deck.DeckList);
-                                dealer.fifthCardValue = dealerFifthCard.cardValue;
-                                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                dealerCardTotal = dealer.GetPlayerCardTotal();
+                                dealer.RevealPlayerCards();
                                 if (dealer.CheckWhetherBust(dealerCardTotal))
                                 {
                                     player.DealerIsBust();
@@ -154,30 +131,28 @@ namespace BlackJack
                         }
                     }
                 } 
-                else if (userInputLower == "t" || userInputLower == "twist")
+                else if (userInputLower == "t")
                 {
                     Console.WriteLine("You draw another card.");
-                    playerThirdCard = selectACard(deck.DeckList);
-                    player.thirdCardValue = playerThirdCard.cardValue;
-                    playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
+                    player.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                    playerCardTotal = player.GetPlayerCardTotal();
                     if (player.CheckWhetherBust(playerCardTotal))
                     {
-                        Console.WriteLine("You got a " + playerThirdCard.cardName + " of " + playerThirdCard.cardSuit + " and your new total is " + playerCardTotal);
+                        player.RevealPlayerCards();
                         Console.WriteLine("I'm afraid you have gone bust");
                         Console.WriteLine("Press any key to replay");
                         Console.ReadLine();
                     } 
                     else if (!player.CheckWhetherBust(playerCardTotal))
                     {
-                        Console.WriteLine("You got a " + playerThirdCard.cardName + " of " + playerThirdCard.cardSuit + " and your new total is " + playerCardTotal);
+                        player.RevealPlayerCards();
                         Console.WriteLine("Would you like to (S)tick or (T)wist?");
                         userInput = Console.ReadLine();
                         userInputLower = userInput.ToLower();
                         //Player Round 2
-                        if (userInputLower == "s" || userInputLower == "stick")
+                        if (userInputLower == "s")
                         {
-                            Console.WriteLine("The dealer's first card is the: " + dealerFirstCard.cardName + " of " + dealerFirstCard.cardSuit + ". Which is worth: " + dealer.firstCardValue);
-                            Console.WriteLine("The dealer's second card is the: " + dealerSecondCard.cardName + " of " + dealerSecondCard.cardSuit + ". which is worth: " + dealer.secondCardValue);
+                            dealer.RevealPlayerCards();
                             Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                             if (playerCardTotal < dealerCardTotal)
                             {
@@ -190,10 +165,9 @@ namespace BlackJack
                             else if (playerCardTotal > dealerCardTotal)
                             {
                                 Console.WriteLine("The Dealer Twists.");
-                                dealerThirdCard = selectACard(deck.DeckList);
-                                dealer.thirdCardValue = dealerThirdCard.cardValue;
-                                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                dealerCardTotal = dealer.GetPlayerCardTotal();
+                                dealer.RevealPlayerCards();
                                 if (dealer.CheckWhetherBust(dealerCardTotal))
                                 {
                                     player.DealerIsBust();
@@ -209,10 +183,9 @@ namespace BlackJack
                                 else if (dealerCardTotal < playerCardTotal)
                                 {
                                     Console.WriteLine("The dealer twists.");
-                                    dealerFourthCard = selectACard(deck.DeckList);
-                                    dealer.fourthCardValue = dealerFourthCard.cardValue;
-                                    dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                    Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                    dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                    dealerCardTotal = dealer.GetPlayerCardTotal();
+                                    dealer.RevealPlayerCards();
                                     if (dealer.CheckWhetherBust(dealerCardTotal))
                                     {
                                         player.DealerIsBust();
@@ -228,10 +201,9 @@ namespace BlackJack
                                     else if (dealerCardTotal < playerCardTotal)
                                     {
                                         Console.WriteLine("The dealer twists.");
-                                        dealerFifthCard = selectACard(deck.DeckList);
-                                        dealer.fifthCardValue = dealerFifthCard.cardValue;
-                                        dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                        Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                        dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                        dealerCardTotal = dealer.GetPlayerCardTotal();
+                                        dealer.RevealPlayerCards();
                                         if (dealer.CheckWhetherBust(dealerCardTotal))
                                         {
                                             player.DealerIsBust();
@@ -254,30 +226,28 @@ namespace BlackJack
                                 }
                             }
                         }
-                        else if (userInputLower == "t" || userInputLower == "twist")
+                        else if (userInputLower == "t")
                         {
                             Console.WriteLine("You draw another card.");
-                            playerFourthCard = selectACard(deck.DeckList);
-                            player.fourthCardValue = playerFourthCard.cardValue;
-                            playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
+                            player.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                            playerCardTotal = player.GetPlayerCardTotal();
                             if (player.CheckWhetherBust(playerCardTotal))
                             {
-                                Console.WriteLine("You got a " + playerFourthCard.cardName + " of " + playerFourthCard.cardSuit + " and your new total is " + playerCardTotal);
+                                player.RevealPlayerCards();
                                 Console.WriteLine("I'm afraid you have gone bust");
                                 Console.WriteLine("Press any key to replay");
                                 Console.ReadLine();
                             }
                             else if (!player.CheckWhetherBust(playerCardTotal))
                             {
-                                Console.WriteLine("You got a " + playerFourthCard.cardName + " of " + playerFourthCard.cardSuit + " and your new total is " + playerCardTotal);
+                                player.RevealPlayerCards();
                                 Console.WriteLine("Would you like to (S)tick or (T)wist?");
                                 userInput = Console.ReadLine();
                                 userInputLower = userInput.ToLower();
                                 //Player Round 3
-                                if (userInputLower == "s" || userInputLower == "stick")
+                                if (userInputLower == "s")
                                 {
-                                    Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + " of " + dealerFirstCard.cardSuit + ". Which is worth: " + dealer.firstCardValue);
-                                    Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + " of " + dealerSecondCard.cardSuit + ". which is worth: " + dealer.secondCardValue);
+                                    dealer.RevealPlayerCards();
                                     Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                                     if (playerCardTotal < dealerCardTotal)
                                     {
@@ -290,10 +260,9 @@ namespace BlackJack
                                     else if (playerCardTotal > dealerCardTotal)
                                     {
                                         Console.WriteLine("The Dealer Twists.");
-                                        dealerThirdCard = selectACard(deck.DeckList);
-                                        dealer.thirdCardValue = dealerThirdCard.cardValue;
-                                        dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                        Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                        dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                        dealerCardTotal = dealer.GetPlayerCardTotal();
+                                        dealer.RevealPlayerCards();
                                         if (dealer.CheckWhetherBust(dealerCardTotal))
                                         {
                                             player.DealerIsBust();
@@ -309,10 +278,9 @@ namespace BlackJack
                                         else if (dealerCardTotal < playerCardTotal)
                                         {
                                             Console.WriteLine("The dealer twists.");
-                                            dealerFourthCard = selectACard(deck.DeckList);
-                                            dealer.fourthCardValue = dealerFourthCard.cardValue;
-                                            dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                            Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                            dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                            dealerCardTotal = dealer.GetPlayerCardTotal();
+                                            dealer.RevealPlayerCards();
                                             if (dealer.CheckWhetherBust(dealerCardTotal))
                                             {
                                                 player.DealerIsBust();
@@ -328,10 +296,9 @@ namespace BlackJack
                                             else if (dealerCardTotal < playerCardTotal)
                                             {
                                                 Console.WriteLine("The dealer twists.");
-                                                dealerFifthCard = selectACard(deck.DeckList);
-                                                dealer.fifthCardValue = dealerFifthCard.cardValue;
-                                                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                                Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                                dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                                dealerCardTotal = dealer.GetPlayerCardTotal();
+                                                dealer.RevealPlayerCards();
                                                 if (dealer.CheckWhetherBust(dealerCardTotal))
                                                 {
                                                     player.DealerIsBust();
@@ -355,22 +322,20 @@ namespace BlackJack
                                     }
 
                                 }
-                                else if (userInputLower == "t" || userInputLower == "twist")
+                                else if (userInputLower == "t")
                                 {
                                     Console.WriteLine("You draw another card.");
-                                    playerFifthCard = selectACard(deck.DeckList);
-                                    player.fifthCardValue = playerFifthCard.cardValue;
-                                    playerCardTotal = player.addCards(player.firstCardValue, player.secondCardValue, player.thirdCardValue, player.fourthCardValue, player.fifthCardValue);
+                                    player.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                    playerCardTotal = player.GetPlayerCardTotal();
                                     if (player.CheckWhetherBust(playerCardTotal))
                                     {
-                                        Console.WriteLine("You got a " + playerFifthCard.cardName + " of " + playerFifthCard.cardSuit + " and your new total is " + playerCardTotal);
+                                        player.RevealPlayerCards();
                                         Console.WriteLine("I'm afraid you have gone bust");
                                         Console.ReadLine();
                                     }
                                     else if (!player.CheckWhetherBust(playerCardTotal))
                                     {
-                                        Console.WriteLine("The dealer's first card is the: " + dealerFirstCard + " of " + dealerFirstCard.cardSuit + ". Which is worth: " + dealer.firstCardValue);
-                                        Console.WriteLine("The dealer's second card is the: " + dealerSecondCard + " of " + dealerSecondCard.cardSuit + ". which is worth: " + dealer.secondCardValue);
+                                        dealer.RevealPlayerCards();
                                         Console.WriteLine("The dealer's total score is: " + dealerCardTotal);
                                         if (playerCardTotal < dealerCardTotal)
                                         {
@@ -383,10 +348,9 @@ namespace BlackJack
                                         else if (playerCardTotal > dealerCardTotal)
                                         {
                                             Console.WriteLine("The Dealer Twists.");
-                                            dealerThirdCard = selectACard(deck.DeckList);
-                                            dealer.thirdCardValue = dealerThirdCard.cardValue;
-                                            dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                            Console.WriteLine("The dealer got a " + dealerThirdCard.cardName + " of " + dealerThirdCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                            dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                            dealerCardTotal = dealer.GetPlayerCardTotal();
+                                            dealer.RevealPlayerCards();
                                             if (dealer.CheckWhetherBust(dealerCardTotal))
                                             {
                                                 player.DealerIsBust();
@@ -402,10 +366,9 @@ namespace BlackJack
                                             else if (dealerCardTotal < playerCardTotal)
                                             {
                                                 Console.WriteLine("The dealer twists.");
-                                                dealerFourthCard = selectACard(deck.DeckList);
-                                                dealer.fourthCardValue = dealerFourthCard.cardValue;
-                                                dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                                Console.WriteLine("The dealer got a " + dealerFourthCard.cardName + " of " + dealerFourthCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                                dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                                dealerCardTotal = dealer.GetPlayerCardTotal();
+                                                dealer.RevealPlayerCards();
                                                 if (dealer.CheckWhetherBust(dealerCardTotal))
                                                 {
                                                     player.DealerIsBust();
@@ -421,10 +384,9 @@ namespace BlackJack
                                                 else if (dealerCardTotal < playerCardTotal)
                                                 {
                                                     Console.WriteLine("The dealer twists.");
-                                                    dealerFifthCard = selectACard(deck.DeckList);
-                                                    dealer.fifthCardValue = dealerFifthCard.cardValue;
-                                                    dealerCardTotal = dealer.addCards(dealer.firstCardValue, dealer.secondCardValue, dealer.thirdCardValue, dealer.fourthCardValue, dealer.fifthCardValue);
-                                                    Console.WriteLine("The dealer got a " + dealerFifthCard.cardName + " of " + dealerFifthCard.cardSuit + ". Their total is now " + dealerCardTotal);
+                                                    dealer.PlayerHand.Add(deck.SelectACard(deck.DeckList));
+                                                    dealerCardTotal = dealer.GetPlayerCardTotal();
+                                                    dealer.RevealPlayerCards();
                                                     if (dealer.CheckWhetherBust(dealerCardTotal))
                                                     {
                                                         player.DealerIsBust();
@@ -454,16 +416,5 @@ namespace BlackJack
                 }
             }
         }
-
-        public PlayingCard selectACard(List<PlayingCard> PassedDeckArray)
-        {
-                PlayingCard selectedCard;
-
-                int selectedCardnumber = random.Next(1, 52);
-                selectedCard = PassedDeckArray[selectedCardnumber];
-
-            return selectedCard;
-        } 
-
     }
 }
