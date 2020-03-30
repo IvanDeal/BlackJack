@@ -8,6 +8,7 @@ namespace BlackJack
 {
     class Player
     {
+        Random random = new Random();
 
         public int firstCardValue;
         public int secondCardValue;
@@ -20,14 +21,28 @@ namespace BlackJack
             clearPlayerTotals();
         }
 
-        public void PlayerTwist(string userInput)
+        public void getPlayerDecision(string userInput)
         {
-            Console.WriteLine("The dealer hands you a card.");
+            if(userInput == "s")
+            {
+                PlayerStick();
+            }
+            else if (userInput == "t")
+            {
+                PlayerTwist();
+            }
         }
 
-        public void PlayerStick(string userInput)
+        public void PlayerTwist()
+        {
+            Console.WriteLine("The dealer hands you a card.");
+            //SelectACard(game.deck.DeckList);
+        }
+
+        public void PlayerStick()
         {
             Console.WriteLine("You stick.....was that wise?");
+            //SelectACard(deck.DeckList);
         }
 
         public void ExitGame()
@@ -35,9 +50,14 @@ namespace BlackJack
             Environment.Exit(0);
         }
 
-        public void SelectACard()
+        public void SelectACard(List<PlayingCard> PassedDeckArray)
         {
+            PlayingCard selectedCard;
 
+            int selectedCardnumber = random.Next(1, 52);
+            selectedCard = PassedDeckArray[selectedCardnumber];
+
+            //return selectedCard;
         }
 
         public void DealerIsBust()
