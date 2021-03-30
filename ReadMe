@@ -1,12 +1,11 @@
 
      Version 1.5 of my Blackjack game. Base project complete. Things to improve/add/change in future versions
-     1) Move objects into classes for easier management and tidyness
+     1) Move objects into classes for easier management
      2) Add visuals/graphics
-     3) Game loop
-     4) Add currency to wager?
+     3) Full game loop
+     4) Add in game currency to wager
      5) Extended blackjack rules such as splits and having a blackjack and an ace
-     6) Ace is currently only worth 1, need to add option for 11
-     7) I think there are also rules about minimum numbers to stick on.....16 maybe? Need to find those.
-     8) Multiple players?
+     6) Make Aces worth 1 and 11
+     8) Multiple players
      9) Clean up inputs
      10) Clean up huge If statement
